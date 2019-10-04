@@ -59,6 +59,10 @@ var routers = [
                 path: 'danh-muc-duong',
                 component: loadSrc('components/users/admins/routerViewAdmin/danhMucTuyenDuong') 
             },
+            {
+                path: 'thong-ke',
+                component: loadSrc('components/users/admins/routerViewAdmin/thongKe') 
+            },
         ]
     }                                                       
 ]

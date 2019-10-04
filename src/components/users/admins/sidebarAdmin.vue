@@ -85,6 +85,10 @@
           <v-list-item-icon><v-icon>mdi-routes</v-icon></v-list-item-icon>
         </v-list-item>
       </v-list-group>
+      <v-list-item link to="/admin/thong-ke">
+        <v-list-item-icon><v-icon>mdi-poll</v-icon></v-list-item-icon>
+        <v-list-item-title>Thống kê</v-list-item-title>
+        </v-list-item>
       <v-list-group>
         <template v-slot:activator>
           <v-list-item-content>
@@ -92,7 +96,7 @@
           </v-list-item-content>
         </template>
         <v-list-item>
-          <v-list-item-title>Cập Nhật Người Dùng</v-list-item-title>
+          <v-list-item-title>Thống kê Cây Xanh</v-list-item-title>
           <v-list-item-icon><v-icon>mdi-clipboard-account</v-icon></v-list-item-icon>
         </v-list-item>  
         <v-list-item>
