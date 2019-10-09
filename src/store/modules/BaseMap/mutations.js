@@ -351,7 +351,7 @@ const mutations = {
             var polygon = new Polygon({
                 rings: payload.rings,
                 spatialReference: { 
-                        latestWkid: 3857,
+                    latestWkid: 3857,
                     wkid: 102100 }
               });
             
@@ -364,26 +364,26 @@ const mutations = {
               });
             
               // Add the geometry and symbol to a new graphic
-              var polygonGraphic = new Graphic({
+            var polygonGraphic = new Graphic({
                 geometry: polygon,
                 symbol: fillSymbol
-              });
+            });
             //   console.log(zoom)
-              state.view.graphics.removeAll()
-              state.view.graphics.add(polygonGraphic);
-              state.view.goTo({
+            state.view.graphics.removeAll()
+            state.view.graphics.add(polygonGraphic);
+            state.view.goTo({
                 target: polygonGraphic,
                 zoom: payload.zoom
-                }) 
+            }) 
               //query
-              let queryFeature = new Query(
-                {
-                    returnGeometry: true,
-                    outFields: ["*"],
-                    geometry: polygon,
-                    spatialRelationship: "intersects"
-                });
-              let FeatureTask = new QueryTask({
+            let queryFeature = new Query(
+            {
+                returnGeometry: true,
+                outFields: ["*"],
+                geometry: polygon,
+                spatialRelationship: "intersects"
+            });
+            let FeatureTask = new QueryTask({
                 url: "https://tilis.vbgis.vn/arcgis/rest/services/DoThi/CayXanh/FeatureServer/0"
             });
             FeatureTask.execute(queryFeature).then((response) => {

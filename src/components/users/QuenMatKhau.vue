@@ -4,7 +4,7 @@
           <v-card>
           <div class="login-content">
             <img src="http://localhost:8080/images/logoVNPT.png" width="40px">
-            <h1 class="login-title">Quên Mật Khẩu</h1>
+            <h1 class="login-title">Quên mật khẩu</h1>
             <small style="font-style:italic">Vui lòng điền email để được cấp lại mật khẩu!</small>
             <v-text-field
               prepend-icon="mdi-email"
@@ -14,7 +14,7 @@
             >
             </v-text-field>
             <div id="changetab">
-              <small @click="updateTab()">Đăng Nhập</small>
+              <small @click="updateTab()">Đăng nhập</small>
             </div> 
             <v-btn
              color="primary"

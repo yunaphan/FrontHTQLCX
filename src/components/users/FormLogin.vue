@@ -4,7 +4,7 @@
           <v-card>
           <div class="login-content">
             <img src="http://localhost:8080/images/logoVNPT.png" width="40px">
-            <h1 class="login-title">Đăng Nhập</h1>
+            <h1 class="login-title">Đăng nhập</h1>
             <v-text-field
               prepend-icon="mdi-account"
               name="username"
@@ -16,7 +16,7 @@
               prepend-icon="mdi-lock-question"
               name="password"
               label="Password"
-              :type="password"
+              :type="display_password"
               :append-icon="mdiIcon"
               @click:append="appendCallback"
             >
@@ -26,8 +26,10 @@
             </div> 
             <v-btn
              color="primary"
-             class="btn-login">
-              Đăng Nhập
+             class="btn-login"
+             @click="login"
+            >
+              Đăng nhập
             </v-btn>
           </div>
           </v-card>
@@ -35,15 +37,21 @@
       </v-layout> 
 </template>
 <script>
+import axios from 'axios'
 export default {
     name:'formlogin',
     props: ["tab"],
     data()
     {
         return{
-            password: 'password',
+            display_password: 'password',
             mdiIcon: 'mdi-eye-off',
-            eyeOpen: false
+            eyeOpen: false,
+            user:{
+              username: "phantien",
+              password: "123123"
+            }
+            
         }
     },
     methods:{
@@ -53,18 +61,32 @@ export default {
         appendCallback(){
             if(this.eyeOpen == false)
             {   
-                this.eyeOpen = !this.eyeOpen
-                this.password="text"
-                this.mdiIcon="mdi-eye"
+              this.eyeOpen = !this.eyeOpen
+              this.display_password="text"
+              this.mdiIcon="mdi-eye"
             }
             else
             {
-                this.eyeOpen = !this.eyeOpen
-                this.password="password"
-                this.mdiIcon="mdi-eye-off"
+              this.eyeOpen = !this.eyeOpen
+              this.display_password="password"
+              this.mdiIcon="mdi-eye-off"
             }
-            
+        },
+        login(){
+          axios.post("http://113.161.225.252:8000/login/", this.user, {
+            headers:{
+              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            }
+          })
+          .then((response) =>{
+            console.log(response.data)
+          })
         }
-    }
+    },
+    beforeCreate() {
+      if(!this.$session.exists()){
+        this.$router.push('/login')
+      }
+    },
 }
 </script>

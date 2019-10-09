@@ -63,6 +63,10 @@ var routers = [
                 path: 'thong-ke',
                 component: loadSrc('components/users/admins/routerViewAdmin/thongKe') 
             },
+            {
+                path: 'thong-ke-pdf',
+                component: loadSrc('components/users/admins/routerViewAdmin/xuatpdf') 
+            },
         ]
     }                                                       
 ]

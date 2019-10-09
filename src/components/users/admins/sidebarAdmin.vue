@@ -92,22 +92,22 @@
       <v-list-group>
         <template v-slot:activator>
           <v-list-item-content>
-            <v-list-item-title><v-icon>mdi-poll</v-icon> Thống kê</v-list-item-title>
+            <v-list-item-title><v-icon>mdi-calendar-blank-multiple</v-icon> Lịch thi công</v-list-item-title>
           </v-list-item-content>
         </template>
         <v-list-item>
-          <v-list-item-title>Thống kê Cây Xanh</v-list-item-title>
-          <v-list-item-icon><v-icon>mdi-clipboard-account</v-icon></v-list-item-icon>
+          <v-list-item-title>Lập lịch thi công</v-list-item-title>
+          <v-list-item-icon><v-icon>mdi-calendar-text</v-icon></v-list-item-icon>
         </v-list-item>  
         <v-list-item>
-          <v-list-item-title>Đổi mật khẩu</v-list-item-title>
-          <v-list-item-icon><v-icon>mdi-key-change</v-icon></v-list-item-icon>
+          <v-list-item-title>Lịch thi công khẩn cấp</v-list-item-title>
+          <v-list-item-icon><v-icon>mdi-calendar-plus</v-icon></v-list-item-icon>
         </v-list-item>   
-        <v-list-item>
-          <v-list-item-title>Khóa Tài Khoản</v-list-item-title>
-          <v-list-item-icon><v-icon>mdi-key-remove</v-icon></v-list-item-icon>
-        </v-list-item>
       </v-list-group>
+      <v-list-item>
+        <v-icon>mdi-comment-quote-outline</v-icon>
+        <v-list-item-title> Ý kiến phản ánh</v-list-item-title>
+      </v-list-item> 
     </v-navigation-drawer>
   </v-card>
 </template>

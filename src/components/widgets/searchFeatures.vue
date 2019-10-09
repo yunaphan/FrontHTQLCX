@@ -52,11 +52,11 @@
                 </v-card>
               </v-col>
               <v-col cols="12" sm="12">
-                  <ul>
+                  <ol>
                       <li v-for="(search, index) in $store.state.BaseMap.searchs" :key="index">
-                        {{search.attributes.SoHieu }} - {{search.attributes.MaTenCX}}  <v-btn icon @click="goTo(search)"> <v-icon>mdi-chevron-right</v-icon></v-btn>
+                        {{search.attributes.SoHieu }} - {{search.attributes.MaTenCX}} - {{search.attributes.TuyenDuong}}  <v-btn icon @click="goTo(search)"> <v-icon>mdi-chevron-right</v-icon></v-btn>
                       </li>
-                  </ul>
+                  </ol>
               </v-col>
             </v-row>
           </v-container>
@@ -174,7 +174,7 @@ export default {
       },
       FilterTD()
       {
-        this.$store.state.BaseMap.FeatureLayer.definitionExpression = "TuyenDuong  = '"+ this.maduong + "'"
+        // this.$store.state.BaseMap.FeatureLayer.definitionExpression = "TuyenDuong  = '"+ this.maduong + "'"
       },
       goTo(search)
       {
@@ -188,7 +188,6 @@ export default {
             },
             zoom: 15
         }) 
-        console.log(search)
         this.$store.state.BaseMap.view.popup.open({
           location: search.geometry,
           features: search.attributes,

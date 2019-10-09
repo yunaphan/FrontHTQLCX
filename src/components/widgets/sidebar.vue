@@ -17,7 +17,7 @@
 
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item link to="/admin">
+      <v-list-item link to="/admin/dash-board">
         <v-icon>mdi-home</v-icon>
         <v-list-item-title> Home</v-list-item-title>
       </v-list-item>

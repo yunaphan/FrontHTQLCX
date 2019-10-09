@@ -7,8 +7,8 @@
         </div>
         <div style=" width: 100%;">
             <v-row with="100%">
-                <v-col cols="12" md="1" sm="1">
-                </v-col>
+                <!--<v-col cols="12" md="1" sm="1">
+                </v-col>-->
                 <v-col cols="12" md="2" sm="2">
                     <v-select
                         :items="listStreet"
@@ -36,22 +36,46 @@
                         v-model="MaTenCX"
                     ></v-select>
                 </v-col>
-                <v-col cols="12" md="5" sm="5">
-                    <v-btn color="success" style="margin-top: 12px;" @click="thongkeketxuat()">Hiển thị</v-btn>
-                    <v-btn color="success" style="margin: 12px 0 0 12px;" @click="resetthongke()"> Khôi phục</v-btn>
+                <v-col cols="12" md="6" sm="6">
+                    <v-btn color="success" style="margin-top: 12px;" @click="resetthongke()"><v-icon>mdi-restore</v-icon></v-btn>
+                    <v-btn color="success" style="margin: 12px 0 0 12px;" @click="thongkeketxuat()">Hiển thị</v-btn>
+                    <div style="width: 100px; display: inline-block; margin-left: 12px;">
+                        <v-select
+                            :items="tacvu"
+                            item-text="title"
+                            item-value="value"
+                            v-model="selected"
+                            label="Loại file"
+                        ></v-select>
+                    </div>
                     <v-btn color="success" style="margin: 12px 0 0 12px;" @click="xuatthongke()">
                         <download-excel
-                            :data   = "result_list"
+                            :data = "result_list"
                             :fields = "json_fields"
                             :fetch = "xuatthongke"
+                            :type = "mimetype"
                             worksheet = "cây xanh"
                             name = "Thống kê cây xanh"
                             footer ="Người thống kê: Phan Thị Thủy Tiên"
                         >
-                        In Báo Cáo
+                        Xuất file
                         </download-excel>
                     </v-btn>
+                    <!--<v-row>
+                        <v-col cols="12" md="4" sm="4"></v-col>
+                        <v-col cols="12" md="3" sm="3">
+                            <v-select
+                                :items="tacvu"
+                                item-text="title"
+                                item-value="value"
+                                v-model="selected"
+                                label="Loại file"
+                            ></v-select>
+                        </v-col>
+                    </v-row>-->
+                    
                 </v-col>
+                
             </v-row>
         </div>
         <p style="text-decoration: underline;">danh sách cây theo tiêu chí thống kê</p>
@@ -101,7 +125,7 @@ export default {
                 "STT" : 'objectid',
                 "Số hiệu": 'sohieu',
                 "Tên cây xanh": 'matencx',
-                "Đường kính": 'duobgkinh',
+                "Đường kính": 'duongkinh',
                 "Chiều cao": 'chieucao',
                 "Độ rộng tán": 'dorongtan',
                 "Ngày trồng": 'ngaytrong',
@@ -110,13 +134,20 @@ export default {
                 "Ghi chú": 'ghichu',
                 "Tình Trạng": {
                     field: 'matinhtrang',
-                    callback: (value) => {
-                        console.log("value", value)
-                    }
+                    // callback: (value) => {
+                    //     // console.log("value", value)
+                    // }
                     },
                 "Tuyến đường": 'tuyenduong',
                 "Người Cập Nhật": 'nguoicapnhat'
-            }
+            },
+            selected: {},
+            tacvu: [
+                {title: ".pdf", value: "filepdf"},
+                {title:".xls", value: "filexls"},
+                {title: ".csv", value: "filecsv"}
+            ],
+            mimetype: "xls"
 
         }
     },
@@ -217,7 +248,7 @@ export default {
                         return array[index].matencx == this.MaTenCX && array[index].matinhtrang == this.MaTinhTrang
                             && array[index].tuyenduong == this.TuyenDuong
                         })
-                    console.log(this.result_list)
+                    // console.log(this.result_list)
                 }
             })
         },
@@ -228,15 +259,15 @@ export default {
             this.result_list = []
         },
         async xuatthongke(){
-            if(this.result_list == []){
-                console.log("abc")
-            }
-            else
-            {
+            // console.log(this.selected)
+            if(this.selected == "filecsv"){ 
+                this.mimetype = "csv"
                 return this.result_list
             }
-        }
-
+            else{
+                return this.result_list
+            }
+        },
     },
     created() {
         this.apiDanhMucStreet()
