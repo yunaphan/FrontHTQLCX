@@ -2,7 +2,7 @@
     <div>
         <div style=" width: 100%;">
             <v-row with="100%">
-                <v-col cols="12" md="12" sm="12"><p style="text-decoration: underline;">thống kê</p></v-col>
+                <v-col cols="12" md="12" sm="12"><p style="text-decoration: underline; padding-left: 12px;">thống kê</p></v-col>
             </v-row>
         </div>
         <div style=" width: 100%;">
@@ -53,7 +53,7 @@
                             :data = "result_list"
                             :fields = "json_fields"
                             :fetch = "xuatthongke"
-                            :type = "mimetype"
+                            type  = "csv"
                             worksheet = "cây xanh"
                             name = "Thống kê cây xanh"
                             footer ="Người thống kê: Phan Thị Thủy Tiên"
@@ -94,6 +94,9 @@
 <script>
 import axios from 'axios'
 import JsonExcel from 'vue-json-excel' 
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export default {
     name: "thong-ke",
     data(){
@@ -111,7 +114,9 @@ export default {
                 {text: 'Ghi Chú', value: 'ghichu'},
                 {text: 'Tình Trạng', value: 'matinhtrang'},
                 {text: 'Tuyến Đường', value: 'tuyenduong'},
-                {text: 'Người Cập Nhật', value: 'nguoicapnhat'}
+                {text: 'Người Cập Nhật', value: 'nguoicapnhat'},
+                // {text: 'Kinh Độ', value: 'kinhdo'},
+                // {text: 'Vĩ Độ', value: 'vido'}
             ],
             listStreet: [],
             TuyenDuong: null,
@@ -122,7 +127,7 @@ export default {
             listCX: [],
             result_list: [],
             json_fields: {
-                "STT" : 'objectid',
+                "Objectid" : 'objectid',
                 "Số hiệu": 'sohieu',
                 "Tên cây xanh": 'matencx',
                 "Đường kính": 'duongkinh',
@@ -139,7 +144,9 @@ export default {
                     // }
                     },
                 "Tuyến đường": 'tuyenduong',
-                "Người Cập Nhật": 'nguoicapnhat'
+                "Người Cập Nhật": 'nguoicapnhat',
+                // "Kinh độ": 'kinhdo',
+                // "Vĩ độ": 'vido'
             },
             selected: {},
             tacvu: [
@@ -147,8 +154,8 @@ export default {
                 {title:".xls", value: "filexls"},
                 {title: ".csv", value: "filecsv"}
             ],
-            mimetype: "xls"
-
+            mimetype: "",
+            array_list: [],
         }
     },
     components: {
@@ -258,11 +265,88 @@ export default {
             this.MaTenCX = null
             this.result_list = []
         },
-        async xuatthongke(){
-            // console.log(this.selected)
+        xuatthongke(){
+           const array = [
+                            [ 
+                                { 
+                                    text: 'Objectid', bold: true, fontSize: 9, width: 'auto'
+                                    // colSpan: 3,
+                                },
+                                { 
+                                    text: 'Số Hiệu', bold: true, fontSize: 9, width: 'auto'
+                                },
+                                { 
+                                    text: 'Tên cây xanh', bold: true, fontSize: 9, width: 'auto'
+                                },
+                                { 
+                                    text: 'Kinh độ', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Vĩ độ', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Đường kính', bold: true, fontSize: 9, width: 'auto'
+                                },
+                                { 
+                                    text: 'Chiều cao', bold: true, fontSize: 9, width: 'auto'
+                                },
+                                { 
+                                    text: 'Độ rộng tán', bold: true, fontSize: 9, width: 'auto'
+                                },
+                                { 
+                                    text: 'Ngày trồng', bold: true, fontSize: 9, width: 'auto'
+                                },
+                                { 
+                                    text: 'Ngày Cập Nhật', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Thuộc tính', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Ghi chú', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Tình trạng', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Tuyến đường', bold: true, fontSize: 9, width: '*'
+                                },
+                                { 
+                                    text: 'Người cập nhật', bold: true, fontSize: 9, width: '*'
+                                },
+                            ]
+                        ]
+            this.result_list.forEach((arr) => {
+                var rarr = Object.keys(arr).map((key) => {
+                   
+                    return arr[key];
+                });
+                 array.push(rarr)
+            })
             if(this.selected == "filecsv"){ 
                 this.mimetype = "csv"
                 return this.result_list
+            }
+            else if(this.selected == "filepdf"){
+                var docDefinition = {
+                    pageOrientation: 'landscape',
+                    content: [
+                        {
+                            // layout: 'lightHorizontalLines', // optional
+                            layout: {
+                                fillColor: function (rowIndex, node, columnIndex) {
+                                    return (rowIndex === 0) ? '#c2dec2' : null;
+                                }
+                            },
+                            table: {
+                                headerRows: 1,
+                                // widths: [ '*', 'auto', 100, '*' ],
+                                body: array
+                            }
+                        }
+                    ]
+                }
+                pdfMake.createPdf(docDefinition).download('Thongkecayxanh.pdf');
             }
             else{
                 return this.result_list

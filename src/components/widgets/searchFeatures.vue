@@ -1,13 +1,12 @@
 <template>
   <v-row >
     <v-dialog content-class="modalThemCX"  v-model="dialogSearch" persistent hide-overlay>
-     <form >
-      <v-card >
+     <form class="content-form">
+      <v-card style="height: 100%">
         <v-card-title class="themcaytitle">
           <span class="headline">Tra cứu thông tin cây xanh</span>
         </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
+        <v-card-text class="card-text">
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12">
@@ -25,46 +24,42 @@
                   :items="phuongxalist"
                   item-text="tenphuongxa"
                   item-value="maphuongxa"
+                  :disabled = "openCloseDisable()"
                   v-model="maphuongxa"
                   label="Phường Xã"
                   @change="FilterPX()"
                 ></v-select>
               </v-col>
-              <!-- <v-col cols="12" sm="12" md="12">
-                <v-select
-                  :items="tuyenduonglist"
-                  item-text="tenduong"
-                  item-value="maduong"
-                  v-model="maduong"
-                  label="Tuyến Đường"
-                  @change="FilterTD()"
-                ></v-select>
-              </v-col> -->
+
               <v-col cols="12" sm="12" md="12">
-                <v-card>
-                  <v-text-field 
-                    v-model="search_key"
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details>
-                  </v-text-field>
-                </v-card>
+                <v-text-field 
+                  v-model="search_key"
+                  label="Search"
+                  append-icon="mdi-magnify"
+                  single-line
+                  @click:append="search_TD()"
+                  hide-details>
+                </v-text-field>
               </v-col>
+
               <v-col cols="12" sm="12">
                   <ol>
-                      <li v-for="(search, index) in $store.state.BaseMap.searchs" :key="index">
-                        {{search.attributes.SoHieu }} - {{search.attributes.MaTenCX}} - {{search.attributes.TuyenDuong}}  <v-btn icon @click="goTo(search)"> <v-icon>mdi-chevron-right</v-icon></v-btn>
+                      <li v-for="(search, index) in data_search" :key="index">
+                        {{search.attributes.SoHieu }} - {{search.attributes.MaTenCX}} <v-btn icon @click="goTo(search)"><v-icon>mdi-chevron-right</v-icon></v-btn>
+                        <p style="margin-bottom: 0;"><small style="font-size:10px;">{{search.attributes.TuyenDuong}}</small></p>
+                      <hr/>
                       </li>
+                      
                   </ol>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="card-action">
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="$emit('showModalSearchFeatures',false)">Close</v-btn>
           <v-btn color="blue darken-1" type="submit" text>Tìm Kiếm</v-btn>
+          <v-btn color="blue darken-1" type="submit" text>Xuất file</v-btn>
         </v-card-actions>
       </v-card>
       </form>
@@ -74,7 +69,7 @@
 <script>
 import axios from "axios"
 import { queryFeatures } from '@esri/arcgis-rest-feature-layer';
-import  {mapActions} from 'vuex'
+import  {mapActions, mapGetters} from 'vuex'
 export default {
     name: 'search-features',
     data(){
@@ -86,8 +81,20 @@ export default {
         maquanhuyen: "",
         maphuongxa: "",
         maduong: "",
-        search_key: ""
+        search_key: "",
+        data_search: this.getSearch,
+        disabled: true
       }
+    },
+    computed: {
+      ...mapGetters(["getSearch"])
+    },
+    watch: {
+      getSearch(newVal)
+      {
+        this.data_search = newVal
+      },
+      
     },
     props: ['dialogSearch'],
     methods: {
@@ -172,8 +179,17 @@ export default {
           })
         
       },
-      FilterTD()
-      {
+      search_TD()
+      { 
+        if(this.search_key == ""){
+          this.data_search = this.getSearch
+        }
+        else{
+          this.data_search = this.getSearch.filter((value, index, array) =>{
+            return array[index].attributes.TuyenDuong == this.search_key
+          })
+        }
+        console.log(data)
         // this.$store.state.BaseMap.FeatureLayer.definitionExpression = "TuyenDuong  = '"+ this.maduong + "'"
       },
       goTo(search)
@@ -230,6 +246,9 @@ export default {
               ]
         })
         this.$store.state.BaseMap.view.popup.highlightEnabled = true
+      },
+      openCloseDisable(){
+        
       }
     },
     created() {
@@ -237,6 +256,17 @@ export default {
       this.getApiQuanHuyen()
       this.getApiPhuongXa()
     },
- 
 }
 </script>
+<style>
+.card-action{position: fixed; bottom: 0; right: 0;}
+.content-form{position:absolute; width:100%;height:100%;}
+.col-sm-12.col-md-12.col-12 {padding: 0;}
+.card-text{height: calc(100% - 36px); }
+.v-dialog.modalThemCX.v-dialog--active.v-dialog--persistent{overflow-y: hidden;}
+.theme--light.v-card .v-card__text{overflow-y: scroll;}
+.theme--light.v-card .v-card__text::-webkit-scrollbar {width: 5px;}
+.theme--light.v-card .v-card__text::-webkit-scrollbar-track {background: #f1f1f1;}
+.theme--light.v-card .v-card__text::-webkit-scrollbar-thumb {background: #6a6a6a;}
+.theme--light.v-card .v-card__text::-webkit-scrollbar-thumb:hover {background: rgb(38, 137, 214);}
+</style>

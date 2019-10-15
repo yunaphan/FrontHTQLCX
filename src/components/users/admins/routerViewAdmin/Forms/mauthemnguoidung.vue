@@ -1,9 +1,6 @@
 <template>
 <div>
-    <h2
-    >
-      THÊM NGƯỜI DÙNG MỚI 
-    </h2>
+    <p>Thêm người dùng mới</p>
     <hr>
     <form 
     ref="form"
@@ -60,12 +57,14 @@
                 <v-select
                 :items="gtinh"
                 label="Giới Tính"
+                append-icon="mdi-gender-male-female"
                 v-model="user.gioitinh"
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field 
                 label="Số Điện Thoại" 
+                append-icon="mdi-cellphone-iphone"
                 :rules="phoneRules"
                 :counter="10"
                 required
@@ -75,21 +74,41 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field 
                 label="Email*"
+                append-icon="mdi-email-multiple-outline"
                 required
                 :rules="emailRules"
                 v-model="user.email"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field 
-                label="Ngày Sinh*" 
-                required
-                v-model="user.ngaysinh"
-                ></v-text-field>
+                 <v-menu
+                    ref="menu1"
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px">
+                    <template v-slot:activator="{ on }">
+                        <v-text-field
+                        v-model="dateFormatted"
+                        label="Ngày sinh"
+                        hint="MM/DD/YYYY format"
+                        persistent-hint
+                        prepend-icon="mdi-calendar-range"
+                        @blur="date = parseDate(dateFormatted)"
+                        required
+                        v-on="on"
+                        ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+                </v-menu> 
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field 
                 label="Địa Chỉ*" 
+                prepend-icon="mdi-map-marker"
                 required
                 v-model="user.diachi"
                 ></v-text-field>
@@ -97,6 +116,7 @@
               <v-col cols="12" sm="6">
                 <v-text-field 
                 label="Tài Khoản*" 
+                prepend-icon="mdi-account"
                 required
                 v-model="user.username"
                 ></v-text-field>
@@ -106,6 +126,7 @@
                 label="Password*" 
                 type="password" 
                 required
+                prepend-icon="mdi-key"
                 v-model="user.password"
                 ></v-text-field>
               </v-col>
@@ -150,8 +171,9 @@
   import axios from 'axios'
   export default {
     name: "mau-them-nguoi-dung",
-    data: () => ({
-      firstNameRules: [
+    data(){
+      return {
+        firstNameRules: [
         v => !!v || 'Vui lòng điền vào đây',
         v => (v && v.length <= 30) || 'Tên phải nhỏ hơn 30 kí tự',
       ],
@@ -180,16 +202,50 @@
         firstname: "",
         lastname: "",
         middlename: ""
+      },
+      date: new Date().toISOString().substr(0, 10),
+      dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
+      menu1: false,
       }
-    }),
+    },
+    computed: {
+      computedDateFormatted () {
+        return this.formatDate(this.date)
+      },
+    },
+     watch: {
+      date (val) {
+        this.dateFormatted = this.formatDate(this.date)
+      },
+    },
     methods: {
       renderLogo(){
         var render = new FileReader()
         const file = this.$refs.MyAvatar.files[0]
         this.LOGO = URL.createObjectURL(file)
       },
+      formatDate (date) {
+            if (!date) return null
+            const [year, month, day] = date.split('-')
+            return `${day}/${month}/${year}`
+        },
       clear () {
-        this.$refs.form.reset()
+        // this.$refs.form.reset()
+        this.user = {
+          username: "",
+          gioitinh: "",
+          ngaysinh: "1997-04-10",
+          diachi: "",
+          email: "",
+          password: "",
+          is_admin: false,
+          is_staff: false,
+          is_active: false,
+          phone: "",
+          firstname: "",
+          lastname: "",
+          middlename: ""
+        }
       },
       getApiAddUser() {
         // console.log(this.user)

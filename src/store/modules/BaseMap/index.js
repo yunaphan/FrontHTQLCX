@@ -49,6 +49,9 @@ const getters = {
     getFeature: (state) => {
         return state.feature
     },
+    getSearch: (state) => {
+        return state.searchs
+    }
 
     
 }

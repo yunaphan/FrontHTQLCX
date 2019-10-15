@@ -1,11 +1,11 @@
 <template>
-  <v-card>
+  <v-card class="side-bar-left">
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
+      class="nav-drawer"
       permanent
-      style="background-color: #e0e0e0;"
-    >
+      style="background-color: #e0e0e0;">
       <v-list-item class="user_account">
         <v-list-item-avatar>
           <v-img src="http://localhost:8080/images/avatar.jpg"></v-img>
@@ -24,7 +24,7 @@
 
       <v-divider></v-divider>
 
-      <v-list-item link to="/">
+      <v-list-item link to="/map">
         <v-icon>mdi-home-map-marker</v-icon>
         <v-list-item-title> Home Map</v-list-item-title>
       </v-list-item>
@@ -133,4 +133,23 @@
   .list-title, .close-sidebar{
     color: #fffff8 !important
   }
+  .side-bar-left {position: fixed;height: 100%}
+  .v-navigation-drawer__content::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.v-navigation-drawer__content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.v-navigation-drawer__content::-webkit-scrollbar-thumb {
+  background: #6a6a6a;
+}
+
+/* Handle on hover */
+.v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
+  background: rgb(38, 137, 214);
+}
 </style>

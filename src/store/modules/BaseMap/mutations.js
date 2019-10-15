@@ -388,6 +388,7 @@ const mutations = {
             });
             FeatureTask.execute(queryFeature).then((response) => {
                 var object = []
+                var pointGraphic = null
                 state.searchs = response.features
                 response.features.forEach(feature => {
                     object.push(feature.attributes.OBJECTID)

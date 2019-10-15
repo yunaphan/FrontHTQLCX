@@ -207,6 +207,7 @@ export default {
                         return array[index].matencx == matencx
                     }).length
                     this.series[0].data.push(listcx)
+                    console.log(this.series[0].data)
                     this.pieOptions.series1.push(listcx)
                 })
                 this.matinhtrang.forEach((mtt) => {
@@ -224,20 +225,21 @@ export default {
                     Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
                 }
             })
-            .then( async (response) =>{
+            .then( (response) =>{
                 response.data.forEach((tencx) => {
                     this.chartOptions.xaxis.categories.push(tencx.matencx)
                     this.pieOptions.labels.push(tencx.matencx)
                 })
             })
         },
-        getApiTinhTrangCX(){
-             axios.get("http://113.161.225.252:8000/trang-thai-cay-xanh/", {
+        async getApiTinhTrangCX(){
+            this.$store.state.loading = true
+            await axios.get("http://113.161.225.252:8000/trang-thai-cay-xanh/", {
                 headers: {
                     Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
                 }
             })
-            .then(async (response) =>{
+            .then( (response) =>{
                 this.listtinhtrangcx = response.data
                 this.listtinhtrangcx.forEach((result_arr) => {
                     this.chartOptionsTT.xaxis.categories.push(result_arr.tinhtrang)
@@ -246,12 +248,16 @@ export default {
                     // console.log(this.pieOptionsTT.labels)
                 })
             })
+            this.$store.state.loading = false
         }
     },
     async created() {
+        console.log('created')
+         this.$store.state.loading = await true
         await this.getApiCX()
         await this.getApiTenCX()
         await this.getApiTinhTrangCX()
+          this.$store.state.loading = await false
     },
 }
 </script>

@@ -8,12 +8,20 @@ function loadSrc(View){
 
 var routers = [
     {
-        path: "/",
+        path: '',
+        redirect: '/login'
+    },
+    {
+        path: "/map",
         component: loadSrc('pages/index')
     },
     {
         path: '/login',
         component: loadSrc('components/users/login')
+    },
+    {
+        path: '/phan-anh-tinh-trang-cay-xanh',
+        component: loadSrc('pages/pageFeedback/phanHoiCayXanh')
     },
     {
         path: '/admin',

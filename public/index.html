@@ -16,6 +16,22 @@
       html,body, * {
         font-family: 'Open Sans', sans-serif !important;
       }
+      body::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      /* Track */
+      body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      /* Handle */
+      body::-webkit-scrollbar-thumb {
+        background: #676767;;
+      }
+
+      /* Handle on hover */
+      /* body::-webkit-scrollbar-thumb:hover {} */
     </style>
   </head>
   <body>
@@ -31,7 +47,8 @@
     <!-- Initialize Firebase -->
     <script src="/__/firebase/init.js"></script>
     <script src="@/js/Roboto-Regular-normal.js"></script>
-
+    <script src='build/pdfmake.min.js'></script>
+    <script src='build/vfs_fonts.js'></script>
   </body>
 </html>
 
