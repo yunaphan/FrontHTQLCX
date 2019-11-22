@@ -102,7 +102,7 @@ export default {
       apiDanhSachTinhTrangCX(){
         axios.get("http://113.161.225.252:8000/trang-thai-cay-xanh/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
@@ -120,7 +120,7 @@ export default {
         if(this.dialog_edit == false){
           axios.post("http://113.161.225.252:8000/trang-thai-cay-xanh/", this.status,{
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then(() => {
@@ -131,7 +131,7 @@ export default {
         else{
           axios.put("http://113.161.225.252:8000/trang-thai-cay-xanh/"+this.status.matinhtrang+"/", this.status, {
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then((response) => {
@@ -145,7 +145,7 @@ export default {
         if (confirm("Bạn có muốn xóa tình trạng "+matinhtrang+"?")){
           axios.delete("http://113.161.225.252:8000/trang-thai-cay-xanh/"+matinhtrang+"/", {
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then(() =>{

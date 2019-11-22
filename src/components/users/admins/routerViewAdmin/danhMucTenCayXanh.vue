@@ -92,7 +92,7 @@ export default {
       apiDanhSachTenCX(){
         axios.get("http://113.161.225.252:8000/ten-cay-xanh/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
@@ -112,7 +112,7 @@ export default {
             tencx: this.item_edit.tencx
           },{
             headers: {
-              "Authorization": "Token 638635059406d15db24dfecb856f414042a465ce",
+              "Authorization": "Token "+this.$store.state.token_authorzation,
               "Content-Type": 'application/json'
             }
           })
@@ -125,7 +125,7 @@ export default {
         {
           axios.put("http://113.161.225.252:8000/ten-cay-xanh/"+this.item_edit.matencx+"/",this.item_edit,{
             headers: {
-              "Authorization": "Token 638635059406d15db24dfecb856f414042a465ce",
+              "Authorization": "Token "+this.$store.state.token_authorzation,
               "Content-Type": 'application/json'
             }
           })
@@ -139,7 +139,7 @@ export default {
         if (confirm("Bạn có muốn xóa "+matencx+"?")){
           axios.delete("http://113.161.225.252:8000/ten-cay-xanh/"+matencx+"/", {
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then(() =>{

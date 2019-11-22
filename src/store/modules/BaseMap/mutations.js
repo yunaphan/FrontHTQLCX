@@ -14,7 +14,11 @@ const mutations = {
             "esri/widgets/Expand",
             "esri/widgets/BasemapGallery",
             "esri/widgets/Search",
-        ])
+            "esri/widgets/Track",
+        ],{
+            url: "https://js.arcgis.com/4.11/",
+          
+        })
         .then(([
             Map,
             Basemap,
@@ -26,7 +30,8 @@ const mutations = {
             LayerList,
             Expand,
             BasemapGallery,
-            Search
+            Search,
+            Track
 
         ]) => {
             var map = new Map({
@@ -307,6 +312,11 @@ const mutations = {
                     }
                 })
             });
+            var track = new Track({
+                view: view
+            });
+            view.ui.add(track, "top-right");
+            console.log('track', track.view.center)
 
         });
     },

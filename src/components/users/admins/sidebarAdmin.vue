@@ -86,25 +86,14 @@
         </v-list-item>
       </v-list-group>
       <v-list-item link to="/admin/thong-ke">
-        <v-list-item-icon><v-icon>mdi-poll</v-icon></v-list-item-icon>
-        <v-list-item-title>Thống kê</v-list-item-title>
-        </v-list-item>
-      <v-list-group>
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title><v-icon>mdi-calendar-blank-multiple</v-icon> Lịch thi công</v-list-item-title>
-          </v-list-item-content>
-        </template>
-        <v-list-item>
-          <v-list-item-title>Lập lịch thi công</v-list-item-title>
-          <v-list-item-icon><v-icon>mdi-calendar-text</v-icon></v-list-item-icon>
-        </v-list-item>  
-        <v-list-item>
-          <v-list-item-title>Lịch thi công khẩn cấp</v-list-item-title>
-          <v-list-item-icon><v-icon>mdi-calendar-plus</v-icon></v-list-item-icon>
-        </v-list-item>   
-      </v-list-group>
-      <v-list-item>
+        <v-icon>mdi-poll</v-icon>
+        <v-list-item-title> Thống kê</v-list-item-title>
+      </v-list-item>
+      <v-list-item link to="/admin/lich-thi-cong">
+        <v-icon>mdi-calendar-text</v-icon>
+        <v-list-item-title>Lập lịch thi công</v-list-item-title>
+      </v-list-item>
+      <v-list-item link to="/admin/phan-anh">
         <v-icon>mdi-comment-quote-outline</v-icon>
         <v-list-item-title> Ý kiến phản ánh</v-list-item-title>
       </v-list-item> 
@@ -112,6 +101,7 @@
   </v-card>
 </template>
 <script>
+import  axios from 'axios'
   export default {
     data () {
       return {
@@ -124,17 +114,31 @@
         this.$emit("updateClassSidebar",newVal)
       }
     },
+    created() {
+      console.log(this.$session.get('key'))
+      axios.post("http://113.161.225.252:8000/infomations-by-token/",{
+      key: this.$session.get('key')
+      },
+      {
+        headers: {
+          Authorization: "Token "+this.$store.state.token_authorzation,
+         
+        }
+      }).then((response) => {
+        // console.log(response.data)
+      })
+    },
   }
 </script>
 <style lang="css">
-  .user_account{
+.user_account{
     background-color: #060694;
-  }
-  .list-title, .close-sidebar{
+}
+.list-title, .close-sidebar{
     color: #fffff8 !important
-  }
-  .side-bar-left {position: fixed;height: 100%}
-  .v-navigation-drawer__content::-webkit-scrollbar {
+}
+.side-bar-left {position: fixed;height: 100%}
+.v-navigation-drawer__content::-webkit-scrollbar {
   width: 5px;
 }
 

@@ -15,7 +15,8 @@ const state = {
     danhmuctinhtrangcayxanh: null,
     currentDay: new Date().toJSON().slice(0,10).replace(/-/g,'/'),
     danhsachnguoidung: [],
-    loading: false
+    loading: false,
+    token_authorzation: "277aed44132a8c83ac0a0a5dbe9c0474ba73fc7c"
 }
 
 export default new Vuex.Store({

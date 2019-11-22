@@ -115,7 +115,7 @@ export default {
       apiDanhMucQH(){
         axios.get("http://113.161.225.252:8000/danh-muc-quan-huyen/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{

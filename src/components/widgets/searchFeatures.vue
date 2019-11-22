@@ -24,7 +24,7 @@
                   :items="phuongxalist"
                   item-text="tenphuongxa"
                   item-value="maphuongxa"
-                  :disabled = "openCloseDisable()"
+                  :disabled = "disabled"
                   v-model="maphuongxa"
                   label="Phường Xã"
                   @change="FilterPX()"
@@ -38,7 +38,8 @@
                   append-icon="mdi-magnify"
                   single-line
                   @click:append="search_TD()"
-                  hide-details>
+                  hide-details
+                  :disabled = "disabled_search">
                 </v-text-field>
               </v-col>
 
@@ -55,7 +56,7 @@
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions class="card-action">
+        <v-card-actions class="card-action" background-color="#333">
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="$emit('showModalSearchFeatures',false)">Close</v-btn>
           <v-btn color="blue darken-1" type="submit" text>Tìm Kiếm</v-btn>
@@ -83,7 +84,8 @@ export default {
         maduong: "",
         search_key: "",
         data_search: this.getSearch,
-        disabled: true
+        disabled: true,
+        disabled_search: true
       }
     },
     computed: {
@@ -93,6 +95,10 @@ export default {
       getSearch(newVal)
       {
         this.data_search = newVal
+        // console.log("Bình Thúi",this.data_search.length)
+        if (this.data_search.length > 0){
+          this.disabled_search = false
+        }
       },
       
     },
@@ -105,7 +111,7 @@ export default {
       getApiQuanHuyen(){
         axios.get("http://113.161.225.252:8000/danh-muc-quan-huyen/", {
           headers:{
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) => {
@@ -116,7 +122,7 @@ export default {
       getApiPhuongXa(){
         axios.get("http://113.161.225.252:8000/danh-muc-phuong-xa/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
@@ -127,7 +133,7 @@ export default {
       getApiTuyenduong(){
         axios.get("http://113.161.225.252:8000/danh-muc-tuyen-duong/", {
           headers:{
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) => {
@@ -135,34 +141,30 @@ export default {
           // console.log('TD',response.data)
         })
       },
-      queryFeature(){
-        queryFeatures({
-          url: this.$store.state.BaseMap.url,                   
-        })
-        .then(result)
-      },
+      // queryFeature(){
+      //   queryFeatures({
+      //     url: this.$store.state.BaseMap.url,                   
+      //   })
+      //   .then(result)
+      // },
       async FilterQH()
       {
+        this.disabled = false
         this.phuongxalist = this.listxatmp
         this.phuongxalist = await this.phuongxalist.filter((value,index,array) => {
           return array[index].maquanhuyen == this.maquanhuyen
         })
-        // console.log('filter',phuongxalist)
         await queryFeatures({
           url: "https://tigis.vbgis.vn/arcgis/rest/services/NenTienGiang/QuanHuyen/MapServer/0",
           where: "MaQuanHuyen  = '"+this.maquanhuyen+"'"
         })
           .then((response) => {
-            // console.log(response)
             this.commitdrawGraphics({
               rings: response.features[0].geometry.rings,
               zoom: 11
             })
           
-          }).catch((err) =>  {
-            console.log(err)
           })
-        
       },
       FilterPX()
       {
@@ -189,8 +191,6 @@ export default {
             return array[index].attributes.TuyenDuong == this.search_key
           })
         }
-        console.log(data)
-        // this.$store.state.BaseMap.FeatureLayer.definitionExpression = "TuyenDuong  = '"+ this.maduong + "'"
       },
       goTo(search)
       {
@@ -258,8 +258,8 @@ export default {
     },
 }
 </script>
-<style>
-.card-action{position: fixed; bottom: 0; right: 0;}
+<style scoped>
+.card-action{position: fixed; bottom: 0; right: 0; background-color: #fff; width: 350px;}
 .content-form{position:absolute; width:100%;height:100%;}
 .col-sm-12.col-md-12.col-12 {padding: 0;}
 .card-text{height: calc(100% - 36px); }

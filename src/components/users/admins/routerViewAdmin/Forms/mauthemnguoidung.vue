@@ -130,15 +130,16 @@
                 v-model="user.password"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="2" md="1">
+              <!--<v-col cols="12" sm="2" md="2">
                 <v-checkbox
-                label="Active"
+                label="Mở Tài Khoản"
                 color="primary"
                 hide-details
+                :disabled=""
                 v-model="user.is_active"
                 ></v-checkbox>
               </v-col>
-              <v-col cols="12" sm="2" md="1">
+              <v-col cols="12" sm="2" md="1" hidden>
                 <v-checkbox
                 label="Staff"
                 color="primary"
@@ -146,14 +147,33 @@
                 v-model="user.is_staff"
                 ></v-checkbox>
               </v-col>
-              <v-col cols="12" sm="2" md="1">
+              <v-col cols="12" sm="2" md="2">
                 <v-checkbox
-                label="Admin"
+                label="Người Quản trị"
                 color="primary"
                 hide-details
-                v-model="user.is_admin"
+                :disabled = "!is_admin"
+                v-model="is_admin"
                 ></v-checkbox>
               </v-col>
+              <v-col cols="12" sm="2" md="2">
+                <v-checkbox
+                label="Quản lí nhóm"
+                color="primary"
+                hide-details
+                :disabled="!is_manager"
+                v-model="is_manager"
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" sm="2" md="3">
+                <v-checkbox
+                label="Nhân viên thi công"
+                color="primary"
+                hide-details
+                :disabled="!is_employee"
+                v-model="is_employee"
+                ></v-checkbox>
+              </v-col>-->
             </v-row>
           </v-container>
           <small>*indicates required field</small>
@@ -195,14 +215,19 @@
         diachi: "",
         email: "",
         password: "",
-        is_admin: false,
-        is_staff: false,
-        is_active: false,
         phone: "",
         firstname: "",
         lastname: "",
-        middlename: ""
+        middlename: "",
+        is_admin: true,
+        is_manager: false,
+        is_employee: false,
+        is_staff: true,
+        is_active: true,
       },
+      is_admin: true,
+      is_employee: false,
+      is_manager: false,
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
       menu1: false,
@@ -217,18 +242,24 @@
       date (val) {
         this.dateFormatted = this.formatDate(this.date)
       },
+      is_admin(newVal)
+      {
+        this.user.is_admin = newVal
+        this.is_manager = this.user.is_manager = this.is_employee = this.user.employee = !newVal
+      }
     },
     methods: {
       renderLogo(){
         var render = new FileReader()
         const file = this.$refs.MyAvatar.files[0]
+        this.user.duongdanavatar = file
         this.LOGO = URL.createObjectURL(file)
       },
       formatDate (date) {
             if (!date) return null
             const [year, month, day] = date.split('-')
             return `${day}/${month}/${year}`
-        },
+      },
       clear () {
         // this.$refs.form.reset()
         this.user = {
@@ -249,10 +280,19 @@
       },
       getApiAddUser() {
         // console.log(this.user)
-          axios.post("http://113.161.225.252:8000/user/", this.user, {
+          const form_user = new FormData();
+          form_user.append("username",this.user.username)
+          form_user.append("gioitinh",this.user.gioitinh)
+          form_user.append("ngaysinh",this.user.ngaysinh)
+          form_user.append("diachi",this.user.diachi)
+          form_user.append("email",this.user.email)
+          form_user.append("password",this.user.password)
+          form_user.append("duongdanavatar",this.user.duongdanavatar)
+          form_user.append("gioitinh",this.user.gioitinh)
+          axios.post("http://113.161.225.252:8000/user/", form_user, {
             headers: {
-              "Authorization": "Token 638635059406d15db24dfecb856f414042a465ce",
-              "Content-Type": 'application/json'
+              "Authorization": "Token "+this.$store.state.token_authorzation,
+              "Content-Type": 'multipart/form-data'
             }
         })
         .then((response) => {

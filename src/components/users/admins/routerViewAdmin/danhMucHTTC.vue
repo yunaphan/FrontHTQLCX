@@ -92,7 +92,7 @@ export default {
       apiDanhMucHTTC(){
         axios.get("http://113.161.225.252:8000/hinh-thuc-thi-cong/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
@@ -108,7 +108,7 @@ export default {
         if(this.dialog_edit == false){
           axios.post("http://113.161.225.252:8000/hinh-thuc-thi-cong/", this.HTTC,{
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then(() => {
@@ -119,7 +119,7 @@ export default {
         else{
           axios.put("http://113.161.225.252:8000/hinh-thuc-thi-cong/"+this.HTTC.maloai+"/", this.HTTC, {
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then((response) => {
@@ -134,7 +134,7 @@ export default {
         if (confirm("Bạn có muốn xóa hình thức "+maloai+"?")){
           axios.delete("http://113.161.225.252:8000/hinh-thuc-thi-cong/"+maloai+"/", {
             headers: {
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then(() =>{

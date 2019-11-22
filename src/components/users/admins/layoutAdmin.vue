@@ -36,6 +36,7 @@ export default {
 
     },
     created() {
+        console.log(this.$session.get('key'))
     },
 }
 </script>

@@ -25,6 +25,12 @@ export default {
       this.tab = value
     }
   },
+  created() {
+    if(this.$session.has('key'))
+    {
+      this.$router.push('/map')
+    }
+  },
 }
 </script>
 <style>

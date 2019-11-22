@@ -37,8 +37,8 @@
                     ></v-select>
                 </v-col>
                 <v-col cols="12" md="6" sm="6">
-                    <v-btn color="success" style="margin-top: 12px;" @click="resetthongke()"><v-icon>mdi-restore</v-icon></v-btn>
-                    <v-btn color="success" style="margin: 12px 0 0 12px;" @click="thongkeketxuat()">Hiển thị</v-btn>
+                    <v-btn color="#0277bd" style="margin-top: 12px; color:#fff;" @click="resetthongke()"><v-icon>mdi-restore</v-icon></v-btn>
+                    <v-btn color="#0277bd" style="margin: 12px 0 0 12px; color:#fff;" @click="thongkeketxuat()">Hiển thị</v-btn>
                     <div style="width: 100px; display: inline-block; margin-left: 12px;">
                         <v-select
                             :items="tacvu"
@@ -48,12 +48,12 @@
                             label="Loại file"
                         ></v-select>
                     </div>
-                    <v-btn color="success" style="margin: 12px 0 0 12px;" @click="xuatthongke()">
+                    <v-btn color="#0277bd" style="margin: 12px 0 0 12px; color:#fff;" @click="xuatthongke()">
                         <download-excel
                             :data = "result_list"
                             :fields = "json_fields"
                             :fetch = "xuatthongke"
-                            type  = "csv"
+                            type  = "xls"
                             worksheet = "cây xanh"
                             name = "Thống kê cây xanh"
                             footer ="Người thống kê: Phan Thị Thủy Tiên"
@@ -152,7 +152,7 @@ export default {
             tacvu: [
                 {title: ".pdf", value: "filepdf"},
                 {title:".xls", value: "filexls"},
-                {title: ".csv", value: "filecsv"}
+                // {title: ".csv", value: "filecsv"}
             ],
             mimetype: "",
             array_list: [],
@@ -165,7 +165,7 @@ export default {
         apiDanhMucStreet(){
             axios.get("http://113.161.225.252:8000/danh-muc-tuyen-duong/", {
             headers: {
-                Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                Authorization: "Token "+this.$store.state.token_authorzation
             }
             })
             .then((response) =>{
@@ -175,7 +175,7 @@ export default {
         apiDanhSachTinhTrangCX(){
             axios.get("http://113.161.225.252:8000/trang-thai-cay-xanh/", {
             headers: {
-                Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                Authorization: "Token "+this.$store.state.token_authorzation
             }
             })
             .then((response) =>{
@@ -185,7 +185,7 @@ export default {
         apiDanhSachTenCX(){
             axios.get("http://113.161.225.252:8000/ten-cay-xanh/", {
             headers: {
-                Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                Authorization: "Token "+this.$store.state.token_authorzation
             }
             })
             .then((response) =>{
@@ -195,7 +195,7 @@ export default {
         thongkeketxuat(){
             axios.get("http://113.161.225.252:8000/cay-xanh/", {
             headers: {
-                Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                Authorization: "Token "+this.$store.state.token_authorzation
             }
             })
             .then((response) =>{
@@ -269,50 +269,50 @@ export default {
            const array = [
                             [ 
                                 { 
-                                    text: 'Objectid', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Objectid', bold: true, fontSize: 8, width: 'auto'
                                     // colSpan: 3,
                                 },
                                 { 
-                                    text: 'Số Hiệu', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Số Hiệu', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Tên cây xanh', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Tên cây xanh', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Kinh độ', bold: true, fontSize: 9, width: '*'
+                                    text: 'Kinh độ', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Vĩ độ', bold: true, fontSize: 9, width: '*'
+                                    text: 'Vĩ độ', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Đường kính', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Đường kính', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Chiều cao', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Chiều cao', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Độ rộng tán', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Độ rộng tán', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Ngày trồng', bold: true, fontSize: 9, width: 'auto'
+                                    text: 'Ngày trồng', bold: true, fontSize: 8, width: 'auto'
                                 },
                                 { 
-                                    text: 'Ngày Cập Nhật', bold: true, fontSize: 9, width: '*'
+                                    text: 'Ngày Cập Nhật', bold: true, fontSize: 8, width: '*'
                                 },
                                 { 
-                                    text: 'Thuộc tính', bold: true, fontSize: 9, width: '*'
+                                    text: 'Thuộc tính', bold: true, fontSize: 8, width: '*'
                                 },
                                 { 
-                                    text: 'Ghi chú', bold: true, fontSize: 9, width: '*'
+                                    text: 'Ghi chú', bold: true, fontSize: 8, width: '*'
                                 },
                                 { 
-                                    text: 'Tình trạng', bold: true, fontSize: 9, width: '*'
+                                    text: 'Tình trạng', bold: true, fontSize: 8, width: '*'
                                 },
                                 { 
-                                    text: 'Tuyến đường', bold: true, fontSize: 9, width: '*'
+                                    text: 'Tuyến đường', bold: true, fontSize: 8, width: '*'
                                 },
                                 { 
-                                    text: 'Người cập nhật', bold: true, fontSize: 9, width: '*'
+                                    text: 'Người cập nhật', bold: true, fontSize: 8, width: '*'
                                 },
                             ]
                         ]
@@ -323,18 +323,18 @@ export default {
                 });
                  array.push(rarr)
             })
-            if(this.selected == "filecsv"){ 
-                this.mimetype = "csv"
-                return this.result_list
-            }
-            else if(this.selected == "filepdf"){
+            // if(this.selected == "filecsv"){ 
+            //     this.mimetype = "csv"
+            //     return this.result_list
+            // }
+            if(this.selected == "filepdf"){
                 var docDefinition = {
                     pageOrientation: 'landscape',
                     content: [
                         {
                             // layout: 'lightHorizontalLines', // optional
                             layout: {
-                                fillColor: function (rowIndex, node, columnIndex) {
+                                fillColor: function (rowIndex) {
                                     return (rowIndex === 0) ? '#c2dec2' : null;
                                 }
                             },
@@ -353,6 +353,8 @@ export default {
             }
         },
     },
+
+    
     created() {
         this.apiDanhMucStreet()
         this.apiDanhSachTinhTrangCX()

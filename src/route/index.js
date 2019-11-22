@@ -71,10 +71,18 @@ var routers = [
                 path: 'thong-ke',
                 component: loadSrc('components/users/admins/routerViewAdmin/thongKe') 
             },
+            // {
+            //     path: 'thong-ke-pdf',
+            //     component: loadSrc('components/users/admins/routerViewAdmin/xuatpdf') 
+            // },
             {
-                path: 'thong-ke-pdf',
-                component: loadSrc('components/users/admins/routerViewAdmin/xuatpdf') 
+                path: 'lich-thi-cong',
+                component: loadSrc('components/users/admins/routerViewAdmin/lichThiCong')
             },
+            {
+                path: 'phan-anh',
+                component: loadSrc('pages/phananh')
+            }
         ]
     }                                                       
 ]

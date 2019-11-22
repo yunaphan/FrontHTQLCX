@@ -195,7 +195,7 @@
       getApiDetailUser() {
         axios.get("http://113.161.225.252:8000/user/"+this.$route.params.username+"/", {
           headers: {
-            "Authorization": "Token 638635059406d15db24dfecb856f414042a465ce",
+            "Authorization": "Token "+this.$store.state.token_authorzation,
             "Content-Type": 'application/json'
           }
         })
@@ -206,7 +206,7 @@
       getApiDeleteUser() {
         axios.delete("http://113.161.225.252:8000/user/"+this.user.username+"/", {
           headers: {
-            "Authorization": "Token 638635059406d15db24dfecb856f414042a465ce",
+            "Authorization": "Token "+this.$store.state.token_authorzation,
             "Content-Type": 'application/json'
           }
         })
@@ -218,7 +218,7 @@
       getApiUpdateUser() {
         axios.put("http://113.161.225.252:8000/user/"+this.user.username+"/", this.user, {
           headers: {
-            "Authorization": "Token 638635059406d15db24dfecb856f414042a465ce",
+            "Authorization": "Token "+this.$store.state.token_authorzation,
             "Content-Type": 'application/json'
           }
         })

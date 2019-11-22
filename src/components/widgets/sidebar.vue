@@ -22,7 +22,12 @@
         <v-list-item-title> Home</v-list-item-title>
       </v-list-item>
 
-      <v-list-group>
+      <v-list-item @click="showModalSearchFeatures()">
+        <v-icon >mdi-search-web</v-icon>
+        <v-list-item-title >Tìm Kiếm Cây</v-list-item-title>
+      </v-list-item>
+
+      <!--<v-list-group>
         <template v-slot:activator>
           <v-list-item-content>
             <v-list-item-title><v-icon>mdi-tree</v-icon> Quản Lí Cây Xanh</v-list-item-title>
@@ -40,7 +45,7 @@
               <v-icon >mdi-search-web</v-icon>
           </v-list-item-icon>
         </v-list-item>
-      </v-list-group>
+      </v-list-group>-->
     </v-navigation-drawer>
   </v-card>
 </template>

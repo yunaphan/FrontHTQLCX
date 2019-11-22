@@ -49,7 +49,7 @@ export default {
             eyeOpen: false,
             user:{
               username: "phantien",
-              password: "123123"
+              password: "123213"
             }
             
         }
@@ -75,11 +75,13 @@ export default {
         login(){
           axios.post("http://113.161.225.252:8000/login/", this.user, {
             headers:{
-              Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+              Authorization: "Token "+this.$store.state.token_authorzation
             }
           })
           .then((response) =>{
-            console.log(response.data)
+              this.$session.start()
+              this.$session.set('key',response.data.key)
+              this.$router.push('/admin')
           })
         }
     },

@@ -10,7 +10,7 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12" md="12">
+              <v-col cols="12" sm="12" md="12" style="padding:0;">
                 <v-text-field 
                 label="Số Hiệu*"
                 v-model="getFeature.attributes.SoHieu" 
@@ -18,12 +18,12 @@
                 hint="Nhập số hiệu cây: CT123"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="12">
+              <v-col cols="12" sm="12" class="list_tcx">
                 <v-select
                   :items="getDanhSachTenCX"
                   item-text="tencx"
                   item-value="matencx"
-                  label="Mã Tên"
+                  label="Tên Cây"
                   v-model="getFeature.attributes.MaTenCX"
                 ></v-select>
               </v-col>
@@ -183,7 +183,7 @@
       apiTuyenDuong(){
         axios.get('http://113.161.225.252:8000/danh-muc-tuyen-duong/', {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) => {
@@ -193,7 +193,7 @@
       apiTenCayXanh(){
         axios.get("http://113.161.225.252:8000/ten-cay-xanh/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
@@ -203,7 +203,7 @@
       apiTinhTrangCayXanh(){
         axios.get("http://113.161.225.252:8000/trang-thai-cay-xanh/", {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) => {
@@ -229,7 +229,7 @@
     },
   }
 </script>
-<style lang="css">
+<style lang="css" scoped>
   .modalThemCX{
     max-width: 350px !important;
     position: absolute;
@@ -241,5 +241,8 @@
   .themcaytitle{
     background-color: #0277BD;
     color: #fff;
+  }
+  .list_tcx{
+    padding: 0 !important
   }
 </style>

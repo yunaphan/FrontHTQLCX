@@ -197,7 +197,7 @@ export default {
         getApiCX(){
             axios.get("http://113.161.225.252:8000/cay-xanh/", {
                 headers: {
-                    Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                    Authorization: "Token "+this.$store.state.token_authorzation
                 }
             })
             .then((response) =>{
@@ -207,7 +207,7 @@ export default {
                         return array[index].matencx == matencx
                     }).length
                     this.series[0].data.push(listcx)
-                    console.log(this.series[0].data)
+                    // console.log(this.series[0].data)
                     this.pieOptions.series1.push(listcx)
                 })
                 this.matinhtrang.forEach((mtt) => {
@@ -222,7 +222,7 @@ export default {
         getApiTenCX(){
             axios.get("http://113.161.225.252:8000/ten-cay-xanh/", {
                 headers: {
-                    Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                    Authorization: "Token "+this.$store.state.token_authorzation
                 }
             })
             .then( (response) =>{
@@ -236,7 +236,7 @@ export default {
             this.$store.state.loading = true
             await axios.get("http://113.161.225.252:8000/trang-thai-cay-xanh/", {
                 headers: {
-                    Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+                    Authorization: "Token "+this.$store.state.token_authorzation
                 }
             })
             .then( (response) =>{

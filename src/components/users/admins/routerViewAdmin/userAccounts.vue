@@ -114,7 +114,7 @@
       ApiDanhSachNguoiDung(){
         axios.get('http://113.161.225.252:8000/user/', {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
@@ -128,7 +128,7 @@
       deleteUser(username){
         axios.delete('http://113.161.225.252:8000/user/'+username+'/' , {
           headers: {
-            Authorization: "Token 638635059406d15db24dfecb856f414042a465ce"
+            Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then(() => {

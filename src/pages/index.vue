@@ -48,7 +48,7 @@ export default {
 }
 </script>
 <style>
-    html, body, #content, #viewDiv{
+    html, body, #content, #viewDiv,#app{
         width: 100%;
         height: 100%;
         padding: 0;
@@ -59,6 +59,4 @@ export default {
     #sidebar{
         border-radius: 0;
     }
-
-  
 </style>
