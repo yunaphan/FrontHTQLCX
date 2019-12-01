@@ -7,9 +7,14 @@ function loadSrc(View){
 }
 
 var routers = [
+ 
     {
         path: '',
         redirect: '/login'
+    },
+    {
+        path: '/lich',
+        component: () => import('@/pages/thuvienanh/index.vue')
     },
     {
         path: "/map",
@@ -20,7 +25,7 @@ var routers = [
         component: loadSrc('components/users/login')
     },
     {
-        path: '/phan-anh-tinh-trang-cay-xanh',
+        path: '/phan-anh',
         component: loadSrc('pages/pageFeedback/phanHoiCayXanh')
     },
     {
@@ -86,6 +91,10 @@ var routers = [
             {
                 path: 'quyen-nguoi-dung',
                 component: () => import('@/pages/rules/index.vue')
+            },
+            {
+                path: 'danh-muc-trang-thai-thi-cong',
+                component: loadSrc('components/users/admins/routerViewAdmin/danhmucTTTC')
             }
         ]
     },

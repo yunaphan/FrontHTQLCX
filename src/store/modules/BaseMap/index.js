@@ -28,7 +28,8 @@ const state = {
             NgayTrong: null,
         }
     },
-    searchs: []
+    searchs: [],
+    djalog_imagepage: false
 }
 const getters = {
     getView: (state) => {

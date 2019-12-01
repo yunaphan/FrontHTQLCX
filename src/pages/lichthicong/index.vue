@@ -15,7 +15,7 @@
               <template v-if="past && tracked[date]">
                 <v-sheet
                   
-                > t  Tiêu đề lịch thi công</v-sheet>
+                > Tiêu đề lịch thi công</v-sheet>
               </template>
             </v-row>
           </template>
@@ -26,6 +26,7 @@
 </template>
 <script>
   export default {
+    name: "lichthicong",
     data: () => ({
       today: new Date().getFullYear() + '-' + new Date().getMonth() + 1 +'-' + new Date().getDate(),
       tracked: {

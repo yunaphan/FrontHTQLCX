@@ -57,14 +57,14 @@
                 <v-select
                 :items="gtinh"
                 label="Giới Tính"
-                append-icon="mdi-gender-male-female"
+                prepend-icon="mdi-gender-male-female"
                 v-model="user.gioitinh"
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field 
                 label="Số Điện Thoại" 
-                append-icon="mdi-cellphone-iphone"
+                prepend-icon="mdi-cellphone-iphone"
                 :rules="phoneRules"
                 :counter="10"
                 required
@@ -74,13 +74,13 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field 
                 label="Email*"
-                append-icon="mdi-email-multiple-outline"
+                prepend-icon="mdi-email-multiple-outline"
                 required
                 :rules="emailRules"
                 v-model="user.email"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="4">
                  <v-menu
                     ref="menu1"
                     v-model="menu1"
@@ -105,7 +105,7 @@
                     <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
                 </v-menu> 
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="4">
                 <v-text-field 
                 label="Địa Chỉ*" 
                 prepend-icon="mdi-map-marker"
@@ -113,7 +113,17 @@
                 v-model="user.diachi"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="4">
+                <v-select
+                  prepend-icon="mdi-account-group"
+                  :items="nhomthicong"
+                  item-text="tennhomthicong"
+                  item-value="manhomthicong"
+                  v-model="user.nhomthicong"
+                  label="Nhóm thi công"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="4">
                 <v-text-field 
                 label="Tài Khoản*" 
                 prepend-icon="mdi-account"
@@ -121,7 +131,7 @@
                 v-model="user.username"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="4">
                 <v-text-field 
                 label="Password*" 
                 type="password" 
@@ -130,70 +140,45 @@
                 v-model="user.password"
                 ></v-text-field>
               </v-col>
-              <!--<v-col cols="12" sm="2" md="2">
+              <v-col cols="12" sm="4">
+                <v-select
+                  prepend-icon="mdi-account-group"
+                  :items="dsquyen"
+                  item-text="quyennguoidung"
+                  item-value="maquyen"
+                  v-model="user.quyen"
+                  label="Quyền"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="2" md="4">
                 <v-checkbox
-                label="Mở Tài Khoản"
+                label="Kích hoạt tài khoản"
                 color="primary"
                 hide-details
-                :disabled=""
                 v-model="user.is_active"
                 ></v-checkbox>
               </v-col>
-              <v-col cols="12" sm="2" md="1" hidden>
-                <v-checkbox
-                label="Staff"
-                color="primary"
-                hide-details
-                v-model="user.is_staff"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="12" sm="2" md="2">
-                <v-checkbox
-                label="Người Quản trị"
-                color="primary"
-                hide-details
-                :disabled = "!is_admin"
-                v-model="is_admin"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="12" sm="2" md="2">
-                <v-checkbox
-                label="Quản lí nhóm"
-                color="primary"
-                hide-details
-                :disabled="!is_manager"
-                v-model="is_manager"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="12" sm="2" md="3">
-                <v-checkbox
-                label="Nhân viên thi công"
-                color="primary"
-                hide-details
-                :disabled="!is_employee"
-                v-model="is_employee"
-                ></v-checkbox>
-              </v-col>-->
             </v-row>
           </v-container>
-          <small>*indicates required field</small>
+          <small>*Đây là trường bắt buộc</small>
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" type="submit">Save</v-btn>
-          <v-btn color="blue darken-1" text @click="clear">clear</v-btn>
+          <v-btn color="blue darken-1" text type="submit">Lưu</v-btn>
+          <v-btn color="blue darken-1" text @click="clear">Nhập lại</v-btn>
         </v-card-actions>
       </v-card>
   </form>
 </div>
 </template>
 <script>
+  import * as firebase from 'firebase'
   import axios from 'axios'
   export default {
     name: "mau-them-nguoi-dung",
     data(){
       return {
-        firstNameRules: [
+      firstNameRules: [
         v => !!v || 'Vui lòng điền vào đây',
         v => (v && v.length <= 30) || 'Tên phải nhỏ hơn 30 kí tự',
       ],
@@ -209,28 +194,31 @@
       LOGO: null,
       newUser: null,
       user: {
-        username: "",
-        gioitinh: "",
-        ngaysinh: "1997-04-10",
-        diachi: "",
-        email: "",
-        password: "",
-        phone: "",
-        firstname: "",
-        lastname: "",
-        middlename: "",
-        is_admin: true,
-        is_manager: false,
-        is_employee: false,
-        is_staff: true,
-        is_active: true,
+        "username": "",
+        "gioitinh": "",
+        "ngaysinh": "",
+        "diachi": "",
+        "email": "",
+        "password": "",
+        "noti_token": "",
+        "is_admin": false,
+        "is_staff": false,
+        "is_active": false,
+        "phone": "",
+        "firstname": "",
+        "lastname": "",
+        "middlename": "",
+        "duongdanavatar": null,
+        "nhomthicong": '', 
+        "quyen":null
       },
-      is_admin: true,
-      is_employee: false,
-      is_manager: false,
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
       menu1: false,
+      nhomthicong: [],
+      // manhomthicong: null,
+      dsquyen: [],
+      // maquyen: null
       }
     },
     computed: {
@@ -238,19 +226,16 @@
         return this.formatDate(this.date)
       },
     },
-     watch: {
+    watch: {
       date (val) {
         this.dateFormatted = this.formatDate(this.date)
       },
-      is_admin(newVal)
-      {
-        this.user.is_admin = newVal
-        this.is_manager = this.user.is_manager = this.is_employee = this.user.employee = !newVal
-      }
     },
     methods: {
       renderLogo(){
-        var render = new FileReader()
+        // var storageRef = firebase.storage().ref('');
+            // Create a reference to 'mountains.jpg'
+        const self = this;
         const file = this.$refs.MyAvatar.files[0]
         this.user.duongdanavatar = file
         this.LOGO = URL.createObjectURL(file)
@@ -261,52 +246,92 @@
             return `${day}/${month}/${year}`
       },
       clear () {
-        // this.$refs.form.reset()
         this.user = {
-          username: "",
-          gioitinh: "",
-          ngaysinh: "1997-04-10",
-          diachi: "",
-          email: "",
-          password: "",
-          is_admin: false,
-          is_staff: false,
-          is_active: false,
-          phone: "",
-          firstname: "",
-          lastname: "",
-          middlename: ""
+          "username": "",
+          "gioitinh": "",
+          "ngaysinh": "",
+          "diachi": "",
+          "email": "",
+          "password": "",
+          "noti_token": "",
+          "is_admin": false,
+          "is_staff": false,
+          "is_active": false,
+          "phone": "",
+          "firstname": "",
+          "lastname": "",
+          "middlename": "",
+          "duongdanavatar": null,
+          "nhomthicong": null, 
+          "quyen":null
         }
       },
       getApiAddUser() {
-        console.log(this.user)
-          const form_user = new FormData();
-          form_user.append("username",this.user.username)
-          form_user.append("gioitinh",this.user.gioitinh)
-          form_user.append("ngaysinh",this.user.ngaysinh)
-          form_user.append("diachi",this.user.diachi)
-          form_user.append("email",this.user.email)
-          form_user.append("password",this.user.password)
-          form_user.append("duongdanavatar",this.user.duongdanavatar)
-          form_user.append("gioitinh",this.user.gioitinh)
-          form_user.append("is_admin",true)
-          axios.post("http://113.161.225.252:8000/user/", form_user, {
-            headers: {
-              "Authorization": "Token "+this.$store.state.token_authorzation,
-              'Content-Type': 'application/x-www-form-urlencoded',
-            }
+        // console.log(this.user)
+          var storageRef = firebase.storage().ref('');
+          const app = this;
+          storageRef.child(app.user.duongdanavatar.name).put(app.user.duongdanavatar).then(function(snapshot) {
+            var storage = firebase.storage().ref('');
+              storage.child(app.user.duongdanavatar.name).getDownloadURL().then((url) => {
+              const form_user = new FormData();
+                console.log(url)
+                form_user.append("username",app.user.username)
+                form_user.append("gioitinh",app.user.gioitinh)
+                form_user.append("ngaysinh",app.user.ngaysinh)
+                form_user.append("diachi",app.user.diachi)
+                form_user.append("email",app.user.email)
+                form_user.append("password",app.user.password)
+                form_user.append("duongdanavatar",url)
+                form_user.append("is_admin",true)
+                form_user.append("is_staff",true)
+                form_user.append("is_active",true)
+                form_user.append("firstname",app.user.firstname)
+                form_user.append("middlename",app.user.middlename)
+                form_user.append("lastname",app.user.lastname)
+                form_user.append("nhomthicong",app.user.nhomthicong)
+                form_user.append("quyen",app.user.quyen)
+                axios.post("http://113.161.225.252:8000/user/", form_user, {
+                  headers: {
+                    "Authorization": "Token "+app.$store.state.token_authorzation,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                  }
+              })
+              .then((response) => {
+                // console.log(response.data)
+                this.newUser = response.data
+                alert("Bạn đã thêm nhân viên thành công!")
+                this.$router.push('/admin/user-accounts')
+              }).catch((error) => {
+                // console.log(error)
+              })
+            });
+          });
+          
+      },
+      getApiNhomTC(){
+        axios.get("http://113.161.225.252:8000/nhom-thi-cong/",{
+          headers:{
+            Authorization: "Token "+ this.$store.state.token_authorzation
+          }
         })
-        .then((response) => {
-          console.log(response.data)
-          this.newUser = response.data
-          // this.$router.push('/admin/user-accounts')
-        }).catch((error) => {
-          // console.log(error)
+        .then((response)=>{
+          this.nhomthicong = response.data
+        })
+      },
+      getQuyenNguoiDung(){
+        axios.get("http://113.161.225.252:8000/quyen-nguoi-dung/",{
+          headers:{
+            Authorization: "Token "+ this.$store.state.token_authorzation
+          }
+        })
+        .then((response)=>{
+          this.dsquyen = response.data
         })
       },
     },
     created() {
-
+      this.getApiNhomTC()
+      this.getQuyenNguoiDung()
     },
   }
 </script>

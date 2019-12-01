@@ -1,11 +1,12 @@
 <template>
 <div>
-    <h3>DANH MỤC TÌNH TRẠNG CÂY XANH</h3>
+    <p>Quản lí tình trạng cây xanh</p>
     <hr>
     <v-btn
       class="ma-2"
       tile 
       outlined  
+      v-if="this.getAction_tinhtrang_cx.them == '3.2'"
       color="success"
       :dialog="dialog"
       @click="openFormTTCX()"
@@ -28,7 +29,6 @@
         :headers="headers"
         :items="listTreeStatus"
         :search="search"
-        show-select
       >
         <template v-slot:item.delete="{item}">
           <button @click="deleteTTCX(item.matinhtrang)"><v-icon>mdi-delete</v-icon></button>
@@ -68,8 +68,8 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="openFormTTCX(dialog)">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click="apiUpdateTTCX()">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="openFormTTCX(dialog)">Hủy</v-btn>
+          <v-btn color="blue darken-1" text @click="apiUpdateTTCX()">Lưu</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -77,6 +77,7 @@
 </template>
 <script>
 import axios from 'axios'
+import {mapGetters} from 'vuex'
 export default {
     name: "danh-muc-tinh-trang-cay-xanh",
     data() {
@@ -97,6 +98,9 @@ export default {
           edit_status: null,
           dialog_edit: false,
         }
+    },
+    computed: {
+      ...mapGetters(["getAction_tinhtrang_cx"])
     },
     methods: {
       apiDanhSachTinhTrangCX(){
@@ -142,17 +146,25 @@ export default {
         }
       },
       deleteTTCX(matinhtrang){
-        if (confirm("Bạn có muốn xóa tình trạng "+matinhtrang+"?")){
-          axios.delete("http://113.161.225.252:8000/trang-thai-cay-xanh/"+matinhtrang+"/", {
-            headers: {
-              Authorization: "Token "+this.$store.state.token_authorzation
-            }
-          })
-          .then(() =>{
-            alert("Bạn đã xóa thành công!!")
-            this.apiDanhSachTinhTrangCX()
-          })
+        if(this.getAction_tinhtrang_cx.xoa == '3.4')
+        {
+          if (confirm("Bạn có muốn xóa tình trạng "+matinhtrang+"?")){
+            axios.delete("http://113.161.225.252:8000/trang-thai-cay-xanh/"+matinhtrang+"/", {
+              headers: {
+                Authorization: "Token "+this.$store.state.token_authorzation
+              }
+            })
+            .then(() =>{
+              alert("Bạn đã xóa thành công!!")
+              this.apiDanhSachTinhTrangCX()
+            })
+          }
         }
+        else
+        {
+          alert('Bạn không đủ quyền thực hiện chức năng này!')
+        }
+        
       },
       editDetailTTCX(item){
         this.dialog = true

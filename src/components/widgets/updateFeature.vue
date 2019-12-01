@@ -45,7 +45,7 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="Chiều cao*"
-                  hint="example of persistent helper text"
+                  hint="Đơn vị(m)"
                   v-model="getSelectedFeature.attributes.ChieuCao"
                   required
                 ></v-text-field>
@@ -53,7 +53,7 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="Đường Kính*"
-                  hint="example of persistent helper text"
+                  hint="Đơn vị(m)"
                   required
                   v-model="getSelectedFeature.attributes.DuongKinh"
                 ></v-text-field>
@@ -62,6 +62,7 @@
                 <v-text-field 
                   label="Độ Rộng Tán*" 
                   required
+                  hint="Đơn vị(m)"
                   v-model="getSelectedFeature.attributes.DoRongTan"
                   ></v-text-field>
               </v-col>

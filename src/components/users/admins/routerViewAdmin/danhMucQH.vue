@@ -1,12 +1,12 @@
 <template>
 <div>
-    <h3>DANH MỤC QUẬN HUYỆN</h3>
+    <p>Quản lí danh mục quận huyện</p>
     <hr>
     <v-card class="content-dashboard">
         <v-card-title>
         <div class="flex-grow-1">
             <span style="font-size: 16px !important; text-decoration: underline;">
-                Danh sách hình thức thi công
+                Danh mục quận huyện
             </span>
         </div>
         <v-text-field

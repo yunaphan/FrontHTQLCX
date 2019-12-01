@@ -4,7 +4,8 @@ import mutations from "./mutations"
 import actions from "./actions"
 import getters from "./getters"
 import BaseMap from "./modules/BaseMap/index"
-
+import ModuleQLCX from './modules/functions/quanlycayxanh'
+import ModulQLND from './modules/functions/quanlynguoidung'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ const state = {
     currentDay: new Date().toJSON().slice(0,10).replace(/-/g,'/'),
     danhsachnguoidung: [],
     loading: false,
-    token_authorzation: "277aed44132a8c83ac0a0a5dbe9c0474ba73fc7c"
+    token_authorzation: "6e53a1474b28d72e4a6837e493dc124fbde4a703",
+    api_url: "https://tms-backend.vbgis.vn/"
 }
 
 export default new Vuex.Store({
@@ -26,5 +28,7 @@ export default new Vuex.Store({
     actions,
     modules:{
         BaseMap,
+        ModuleQLCX,
+        ModulQLND,
     }
 });

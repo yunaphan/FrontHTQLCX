@@ -1,9 +1,8 @@
 <template>
 <div>
-    <p>Quản lí tên cây xanh</p>
+    <p>Quản lí trạng thái thi công</p>
     <hr>
     <v-btn
-      v-if="getAction_CX.them == '2.2'"
       class="ma-2"
       tile 
       outlined  
@@ -11,11 +10,11 @@
       :dialog="dialog"
       @click="openFormTCX()"
     >
-      <v-icon left>mdi-plus</v-icon> Thêm Tên Cây Xanh Mới 
+      <v-icon left>mdi-plus</v-icon> Thêm trạng thái thi công mới 
     </v-btn>
     <v-card class="content-dashboard">
       <v-card-title>
-        <div class="flex-grow-1"><span style="font-size: 16px !important; text-decoration: underline;">Danh sách tên cây xanh</span></div>
+        <div class="flex-grow-1"><span style="font-size: 16px !important; text-decoration: underline;">Danh sách trạng thái thi công</span></div>
         <v-text-field
           append-icon="mdi-magnify-minus"
           label="Search"
@@ -26,44 +25,44 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="listTreeName"
+        :items="dstrangthaitc"
         :search="search"
       >
         <template v-slot:item.delete="{item}">
-          <button @click="deleteTCX(item.matencx)"><v-icon>mdi-delete</v-icon></button>
+          <button @click="xoaTTTC(item.matrangthaitc)"><v-icon>mdi-delete</v-icon></button>
         </template>
         <template v-slot:item.edit="{item}">
-          <button @click="editDetailTCX(item)"><v-icon>mdi-account-details</v-icon></button>
+          <button @click="suachitietTTTC(item)"><v-icon>mdi-account-details</v-icon></button>
         </template>
       </v-data-table>
     </v-card>
     <v-dialog v-if="item_edit != null" v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span v-if="edit == false" class="headline">Tên Cây Mới</span>
-          <span v-else class="headline">Cập nhật {{item_edit.tencx}}</span>
+          <span v-if="edit == false" class="headline">Trạng thái</span>
+          <span v-else class="headline">Cập nhật {{item_edit.trangthaitc}}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="6">
                 <v-text-field 
-                label="Mã Tên Cây Xanh"
+                label="Mã trạng thái thi công"
                 :disabled="edit"
-                v-model="item_edit.matencx"></v-text-field>
+                v-model="item_edit.matrangthaitc"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field 
-                label="Tên Cây Xanh"
-                v-model="item_edit.tencx"></v-text-field>
+                label="Trạng thái"
+                v-model="item_edit.trangthaitc"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="openFormTCX(dialog)">Hủy</v-btn>
-          <v-btn color="blue darken-1" text @click="apiThemTenCX()"> <span v-if="edit == true"> Cập nhật</span> <span v-else> Thêm mới</span> </v-btn>
+          <v-btn color="blue darken-1" text @click="openFormTCX(dialog)">hủy</v-btn>
+          <v-btn color="blue darken-1" text @click="getApiPostTTTC()"> <span v-if="edit == true"> Cập nhật</span> <span v-else> Thêm mới</span> </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -77,12 +76,12 @@ export default {
     data() {
         return {
           headers: [
-            {text: "Mã Tên Cây Xanh", value: 'matencx'},
-            {text: "Tên Cây Xanh", value: 'tencx'},
+            {text: "Mã trạng thái", value: 'matrangthaitc'},
+            {text: "Trạng thái", value: 'trangthaitc'},
             {text: 'Xóa', value: 'delete', sortable: false},
             {text: 'Chi tiết', value: 'edit', sortable: false},
           ],
-          listTreeName: [],
+          dstrangthaitc: [],
           search: '',
           dialog: false,
           item_edit: null,
@@ -93,14 +92,14 @@ export default {
       ...mapGetters(["getAction_CX"])
     },
     methods: {
-      apiDanhSachTenCX(){
-        axios.get("http://113.161.225.252:8000/ten-cay-xanh/", {
+      apiDanhSachTTTC(){
+        axios.get("http://113.161.225.252:8000/"+"danh-muc-trang-thai-thi-cong/", {
           headers: {
             Authorization: "Token "+this.$store.state.token_authorzation
           }
         })
         .then((response) =>{
-          this.listTreeName = response.data
+          this.dstrangthaitc = response.data
         })
       },
       openFormTCX(){
@@ -108,12 +107,12 @@ export default {
         this.item_edit = {}
         this.edit = false
       },
-      apiThemTenCX(){
+      getApiPostTTTC(){
         if(this.edit == false)
         {
-          axios.post("http://113.161.225.252:8000/ten-cay-xanh/", {
-            matencx: this.item_edit.matencx,
-            tencx: this.item_edit.tencx
+          axios.post("http://113.161.225.252:8000/"+ "danh-muc-trang-thai-thi-cong/", {
+            matrangthaitc: this.item_edit.matrangthaitc,
+            trangthaitc: this.item_edit.trangthaitc
           },{
             headers: {
               "Authorization": "Token "+this.$store.state.token_authorzation,
@@ -121,53 +120,53 @@ export default {
             }
           })
           .then(() => {
-            this.apiDanhSachTenCX()
+            this.apiDanhSachTTTC()
             this.dialog = false
           })
         }
         else
         {
-          axios.put("http://113.161.225.252:8000/ten-cay-xanh/"+this.item_edit.matencx+"/",this.item_edit,{
+          axios.put("http://113.161.225.252:8000/"+"danh-muc-trang-thai-thi-cong/"+this.item_edit.matrangthaitc+"/",this.item_edit,{
             headers: {
               "Authorization": "Token "+this.$store.state.token_authorzation,
               "Content-Type": 'application/json'
             }
           })
           .then(() =>{
-              this.apiDanhSachTenCX()
+              this.apiDanhSachTTTC()
               this.dialog = false
           })
         }
       },
-      deleteTCX(matencx){
-        if(this.getAction_CX.xoa == '2.4')
-        {
-            if (confirm("Bạn có muốn xóa "+matencx+"?")){
-            axios.delete("http://113.161.225.252:8000/ten-cay-xanh/"+matencx+"/", {
+      xoaTTTC(matrangthaitc){
+        // if(this.getAction_CX.xoa == '2.4')
+        // {
+            if (confirm("Bạn có muốn xóa trạng thái "+matrangthaitc+"?")){
+            axios.delete("http://113.161.225.252:8000/"+"danh-muc-trang-thai-thi-cong/"+matrangthaitc+"/", {
               headers: {
                 Authorization: "Token "+this.$store.state.token_authorzation
               }
             })
             .then(() =>{
               alert("Bạn đã xóa thành công!!")
-              this.apiDanhSachTenCX()
+              this.apiDanhSachTTTC()
             })
           }
-        }
-        else
-        {
-          alert('Bạn không đủ quyền để thực hiện chức năng này!')
-        }
+        // }
+        // else
+        // {
+        //   alert('Bạn không đủ quyền để thực hiện chức năng này!')
+        // }
         
       },
-      editDetailTCX(item){
+      suachitietTTTC(item){
         this.dialog = true
         this.item_edit  = item
         this.edit = true
       }
     },
     created() {
-        this.apiDanhSachTenCX()
+        this.apiDanhSachTTTC()
     },
 }
 </script>

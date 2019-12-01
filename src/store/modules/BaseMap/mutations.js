@@ -310,6 +310,9 @@ const mutations = {
                         state.selectedFeature = await event.target.selectedFeature
                         // await console.log(state.selectedFeature)
                     }
+                    if(event.action.id =="viewImage"){
+                        djalog_imagepage = await true
+                    }
                 })
             });
             var track = new Track({

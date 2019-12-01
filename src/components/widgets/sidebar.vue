@@ -1,5 +1,5 @@
 <template>
-  <v-card >
+  <v-card id="side-bar">
     <v-navigation-drawer
       class="nav-content"
       permanent
@@ -17,12 +17,12 @@
 
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item link to="/admin/dash-board">
+      <v-list-item class="list-item" link to="/admin/dash-board">
         <v-icon>mdi-home</v-icon>
         <v-list-item-title> Home</v-list-item-title>
       </v-list-item>
 
-      <v-list-item @click="showModalSearchFeatures()">
+      <v-list-item class="list-item" @click="showModalSearchFeatures()">
         <v-icon >mdi-search-web</v-icon>
         <v-list-item-title >Tìm Kiếm Cây</v-list-item-title>
       </v-list-item>
@@ -99,5 +99,8 @@ export default {
 }
 .list-title, .close-sidebar{
     color: #fffff8 !important
+}
+.v-list-item__title {
+    font-size: 15px !important;
 }
 </style>

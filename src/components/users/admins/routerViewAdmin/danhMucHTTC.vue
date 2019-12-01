@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h3>DANH MỤC TÌNH TRẠNG CÂY XANH</h3>
+    <p>Quản lí hình thức thi công</p>
     <hr>
     <v-btn
       class="ma-2"

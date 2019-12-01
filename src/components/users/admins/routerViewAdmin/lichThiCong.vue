@@ -21,7 +21,7 @@
                                         <v-text-field
                                         v-model="dateFormattedStart"
                                         label="Ngày bắt đầu"
-                                        hint="MM/DD/YYYY format"
+                                        hint="YYYY-MM-DD format"
                                         persistent-hint
                                         prepend-icon="mdi-calendar-range"
                                         @blur="dateStart = parseDate(dateFormattedStart)"
@@ -61,30 +61,21 @@
                         </v-row>
                     </div>
                     <div>
-                          <v-row>
-                                <v-col>
-                                <v-sheet height="500">
-                                    <v-calendar
-                                    :now="today"
-                                    :value="today"
-                                    color="primary"
-                                    @click:date="viewDay"
-                                    >
-                                    <template v-slot:day="{ present, past, date }">
-                                        <v-row
-                                        class="fill-height"
-                                        >
-                                        <template v-if="past && tracked[date]">
-                                            <v-sheet
-                                            
-                                            > t  Tiêu đề lịch thi công</v-sheet>
-                                        </template>
-                                        </v-row>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-data-table
+                                    :headers="headers_lich_thi_cong"
+                                    :items="list_thi_cong"
+                                >
+                                    <template v-slot:item.trangthaitc='{item}'>
+                                            {{filterTTTC(item.trangthaitc)}}
                                     </template>
-                                    </v-calendar>
-                                </v-sheet>
-                                </v-col>
-                            </v-row>
+                                    <template v-slot:item.nhomthiconglich='{item}'>
+                                            {{filterNTC(item.nhomthiconglich)}}
+                                    </template>
+                                </v-data-table>
+                            </v-col>
+                        </v-row>
                     </div>
                     <div>
                        <step-thi-cong :dialog="dialog" :dateFormattedStart="dateFormattedStart" :dateFormattedEnd="dateFormattedEnd" @closeDialog="dialog = $event"/> 
@@ -115,18 +106,19 @@ export default {
             menu2: false,
             dialog: false,
             e1: 0,
-            today: new Date().getFullYear() + '-' + new Date().getMonth() + 1 +'-' + new Date().getDate(),
-            tracked: {
-                '2019-01-09': [23, 45, 20],
-                '2019-01-08': [10],
-                '2019-01-07': [0, 78, 5],
-                '2019-01-06': [0, 0, 50],
-                '2019-01-05': [0, 10, 23],
-                '2019-01-04': [2, 90],
-                '2019-01-03': [10, 32],
-                '2019-01-02': [80, 10, 10],
-                '2019-01-01': [20, 25, 10],
-            },
+            headers_lich_thi_cong: [
+                {text: 'Tên lịch thi công', value: 'lichthicong', align: 'center', sortable: false},
+                {text: 'Mã tuyến đường', value: 'tuyenduong', align: 'center', sortable: false},
+                {text: 'Nhóm thi công', value: 'nhomthiconglich'},
+                {text: 'Ngày bắt đầu', value: "NgayBD"},
+                {text: 'Ngày hoàn thành', value: 'NgayHoanThanh'},
+                {text: 'Trạng thái', value: 'trangthaitc'},
+                {text: 'Mô tả', value: 'mota',sortable: false},
+
+            ],
+            list_thi_cong: [],
+            nhom_thi_cong: [],
+            dstrangthaitc: [],
         }
     },
     computed: {
@@ -146,13 +138,72 @@ export default {
         formatDate (date){
             if (!date) return null
             const [year, month, day] = date.split('-')
-            return `${day}/${month}/${year}`
+            return `${year}-${month}-${day}`
+        },
+        filterTTTC(id)
+        {
+            return this.dstrangthaitc.filter((value,index,array) => {
+                return array[index].matrangthaitc == id
+            })[0].trangthaitc
+        },
+        filterNTC(id)
+        {
+            return this.nhom_thi_cong.filter((value,index,array) => {
+                return array[index].manhomthicong == id
+            })[0].tennhomthicong
         },
         viewDay({date})
         {
             this.dialog = true
             console.log(date)
-        }
+        },
+        api_lich_thi_cong()
+        {
+            axios.get(this.$store.state.api_url + 'nhom-thi-cong/',{
+                headers: {
+                    Authorization: "Token "+this.$store.state.token_authorzation
+                }
+            }).then((response) => {
+                this.nhom_thi_cong = response.data
+            })
+            axios.get(this.$store.state.api_url + 'chi-tiet-lich-thi-cong/',{
+                    headers: {
+                        Authorization: "Token "+this.$store.state.token_authorzation
+                    }
+                }).then((response) => {
+                this.list_thi_cong = response.data
+               
+                //  console.log(this.list_thi_cong)
+            })
+        },
+        apiGetNTC(){
+            axios.get(this.$store.state.api_url + 'nhom-thi-cong/',{
+                headers: {
+                    Authorization: "Token "+this.$store.state.token_authorzation
+                }
+            }).then((response) => {
+                this.nhom_thi_cong = response.data
+            })
+        },
+        apiGetTTTC(){
+            axios.get(this.$store.state.api_url + 'danh-muc-trang-thai-thi-cong/',{
+                headers: {
+                    Authorization: "Token "+this.$store.state.token_authorzation
+                }
+            }).then((response) => {
+                this.dstrangthaitc = response.data
+            })
+        },
+        // filterrenderTTTC(){
+        //     const trangthai = this.dstrangthaitc.filter((matt)=>{
+        //         return this.dstrangthaicx.matrangthaitc = matt
+        //     })
+        // }
+    },
+    created() {
+        this.apiGetTTTC()
+        this.apiGetNTC()
+        this.api_lich_thi_cong()
     },
 
 }

@@ -1,9 +1,8 @@
 <template>
 <div>
-    <h3 
-    >CẬP NHẬT NGƯỜI DÙNG</h3>
+    <p>Cập nhật người dùng</p>
     <hr>
-    <v-row>
+    <!--<v-row>
       <v-col cols="12" sm="3">
         <v-select
           :items="items_action"
@@ -18,7 +17,7 @@
         <v-btn color="success" @click="tacVuThucHien">
           <v-icon>mdi-pencil-remove-outline</v-icon>
         </v-btn>
-      </v-col>
+      </v-col>-->
     </v-row>
     <router-link :to="'/admin/user-accounts/them-nguoi-dung-moi/'">
       <v-btn
@@ -46,13 +45,14 @@
       :items="users"
       :search = "search"
       item-key="username"
-      show-select
       >
-        <template v-slot:item.admin="{item}">
-          <v-icon v-if="item.is_admin == true">mdi-check</v-icon>
-          <v-icon v-else>mdi-alert-circle-outline</v-icon>
+        <template v-slot:item.nhomthicong="{item}">
+          {{filterNTC(item.nhomthicong)}}
         </template>
-        <template v-slot:item.user="{item}">
+        <template v-slot:item.quyen="{item}">
+          {{filterQuyen(item.quyen)}}
+        </template>
+        <!--<template v-slot:item.user="{item}">
           <v-icon v-if="item.is_staff == true">mdi-check</v-icon>
           <v-icon v-else>mdi-alert-circle-outline</v-icon>
         </template>
@@ -62,7 +62,7 @@
         </template>
         <template v-slot:item.edit="{item}">
           <button><v-icon>mdi-pencil</v-icon></button>
-        </template>
+        </template>-->
         <template v-slot:item.delete="{item}">
           <button @click="deleteUser(item.username)"><v-icon>mdi-delete</v-icon></button>
         </template>
@@ -75,42 +75,32 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters,mapActions } from 'vuex'
   export default {
     data () {
       return {
         dialogForm: false,
         search: '',
-        items_action: [
-          { text: "Tác vụ rỗng", value: ""},
-          { text: "Thêm người dùng mới", value: ""},
-          { text: "xóa người dùng đã chọn", value: ""}
-        ],
         headers: [
-          {text: 'Họ', value: 'firstname'},
+          {text: 'Họ', value: 'lastname'},
           {text: 'Chữ lót', value: 'middlename'},
-          {text: 'Tên', value: 'lastname'},
+          {text: 'Tên', value: 'firstname'},
           {text: 'Tài Khoản', value: 'username'},
           {text: 'Giới Tính', value: 'gioitinh'},
           {text: 'Ngày Sinh', value: 'ngaysinh', width:"100px"},
           {text: 'Địa chỉ', value: 'diachi'},
           {text: 'Số điện thoại', value: 'phone'},
           {text: 'Mail', value: 'email'},
-          {text: 'Admin', value: 'admin', sortable: false},
-          {text: 'Staff', value: 'user', sortable: false},
-          {text: 'Active', value: 'active', sortable: false},
-          // {text: 'Sửa', value: 'edit', align: 'center', width:"40px", sortable: false},
+          {text: 'Nhóm Thi Công', value: 'manhom', sortable: false},
+          {text: 'Quyền', value: 'quyen', sortable: false},
           {text: 'Xóa', value: 'delete', align: 'center', width:"40px", sortable: false},
           {text: 'Chi tiết', value: 'detail', align: 'center', width:"40px", sortable: false},
         ],
         users: [],
+        nhom_thi_cong: [],
+        dsquyen: []
       }
     },
-    computed: {
-      ...mapGetters(['getDanhSachNguoiDung'])
-    },
     methods: {
-      ...mapActions(['commitApiDanhSachNguoiDung']),
       ApiDanhSachNguoiDung(){
         axios.get('http://113.161.225.252:8000/user/', {
           headers: {
@@ -118,8 +108,8 @@
           }
         })
         .then((response) =>{
-          this.commitApiDanhSachNguoiDung(response.data)
           this.users = response.data
+          // console.log("abc",response.data)
         })
       },
       updateformnguoidung(){
@@ -137,12 +127,41 @@
          
         })
       },
-      tacVuThucHien(){
-
-      }
+      apiGetNTC(){
+        axios.get(this.$store.state.api_url + 'nhom-thi-cong/',{
+            headers: {
+                Authorization: "Token "+this.$store.state.token_authorzation
+            }
+        }).then((response) => {
+            this.nhom_thi_cong = response.data
+        })
+      },
+      apiGetQuyen(){
+        axios.get(this.$store.state.api_url + 'quyen-nguoi-dung/',{
+            headers: {
+                Authorization: "Token "+this.$store.state.token_authorzation
+            }
+        }).then((response) => {
+            this.dsquyen = response.data
+        })
+      },
+      filterNTC(id)
+      {
+          return this.nhom_thi_cong.filter((value,index,array) => {
+              return array[index].manhomthicong == id
+          })[0].tennhomthicong
+      },
+      filterQuyen(id)
+      {
+          return this.dsquyen.filter((value,index,array) => {
+              return array[index].maquyen == id
+          })[0].quyennguoidung
+      },
     },
     created() {
-      console.log(this.$seesion.get('key'))
+      // console.log(this.$seesion.get('key'))
+      this.apiGetNTC()
+      this.apiGetQuyen()
       this.ApiDanhSachNguoiDung() 
     },
   }

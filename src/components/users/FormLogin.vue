@@ -75,10 +75,10 @@ export default {
             }
         },
         login(){
-          console.log(this.user)
+          // console.log(this.user)
           axios.post("http://113.161.225.252:8000/login/", this.user)
           .then((response) =>{
-              console.log(response.data)
+              // console.log(response.data)
               this.$session.start()
               this.$session.set('key',response.data.key)
               this.$router.push('/admin')

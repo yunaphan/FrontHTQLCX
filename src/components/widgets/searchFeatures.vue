@@ -59,11 +59,13 @@
         <v-card-actions class="card-action" background-color="#333">
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="$emit('showModalSearchFeatures',false)">Close</v-btn>
-          <v-btn color="blue darken-1" type="submit" text>Tìm Kiếm</v-btn>
-          <v-btn color="blue darken-1" type="submit" text>Xuất file</v-btn>
+          <v-btn color="blue darken-1" @click="dialog2 = true" text>Xuất file</v-btn>
         </v-card-actions>
       </v-card>
       </form>
+    </v-dialog>
+    <v-dialog v-model="dialog2" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card></v-card>
     </v-dialog>
   </v-row>
 </template>
@@ -85,7 +87,8 @@ export default {
         search_key: "",
         data_search: this.getSearch,
         disabled: true,
-        disabled_search: true
+        disabled_search: true,
+        dialog2: false
       }
     },
     computed: {
@@ -192,6 +195,10 @@ export default {
           })
         }
       },
+      xuatFile(){
+        console.log('xuat',this.data_search) 
+
+      },
       goTo(search)
       {
         // console.log(search.geometry.longitude, search.geometry.latitude)
@@ -259,11 +266,13 @@ export default {
 }
 </script>
 <style scoped>
+.v-dialog.modalThemCX{overflow-y: hidden !important;}
+.v-dialog{overflow-y: hidden !important;}
 .card-action{position: fixed; bottom: 0; right: 0; background-color: #fff; width: 350px;}
 .content-form{position:absolute; width:100%;height:100%;}
 .col-sm-12.col-md-12.col-12 {padding: 0;}
 .card-text{height: calc(100% - 36px); }
-.v-dialog.modalThemCX.v-dialog--active.v-dialog--persistent{overflow-y: hidden;}
+.v-dialog.modalThemCX.v-dialog--active.v-dialog--persistent{overflow-y: hidden !important;}
 .theme--light.v-card .v-card__text{overflow-y: scroll;}
 .theme--light.v-card .v-card__text::-webkit-scrollbar {width: 5px;}
 .theme--light.v-card .v-card__text::-webkit-scrollbar-track {background: #f1f1f1;}

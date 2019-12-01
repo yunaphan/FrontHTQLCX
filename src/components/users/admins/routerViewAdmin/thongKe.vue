@@ -270,7 +270,6 @@ export default {
                             [ 
                                 { 
                                     text: 'Objectid', bold: true, fontSize: 8, width: 'auto'
-                                    // colSpan: 3,
                                 },
                                 { 
                                     text: 'Số Hiệu', bold: true, fontSize: 8, width: 'auto'
@@ -318,7 +317,7 @@ export default {
                         ]
             this.result_list.forEach((arr) => {
                 var rarr = Object.keys(arr).map((key) => {
-                   
+                //    console.log(arr[key]);
                     return arr[key];
                 });
                  array.push(rarr)
@@ -349,7 +348,8 @@ export default {
                 pdfMake.createPdf(docDefinition).download('Thongkecayxanh.pdf');
             }
             else{
-                return this.result_list
+                
+                // console.log(this.result_list)
             }
         },
     },

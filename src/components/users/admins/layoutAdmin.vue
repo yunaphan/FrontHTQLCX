@@ -18,6 +18,8 @@
     
 </template>
 <script>
+import axios from 'axios'
+import {mapActions} from 'vuex'
 export default {
     components: {
         "side-bar-admin": require('@/components/users/admins/sidebarAdmin.vue').default,
@@ -33,9 +35,89 @@ export default {
     //     }
     // },
     methods: {
-
+        ...mapActions(["commitAction_CX",
+        "commitAction_tinhtrang_cx", 
+        "commitAction_thicong",
+        "commitAction_nd",
+        "commitAction_tttc",
+        ])
     },
     created() {
+        axios.post(this.$store.state.api_url+ 'infomations-by-token/',{
+            key: this.$session.get('key')
+        },
+        {
+            headers: {
+                Authorization: "Token "+this.$store.state.token_authorzation
+            }
+        }).then((response) => {
+            axios.get(this.$store.state.api_url + 'quyen-nguoi-dung/?maquyen='+response.data.quyen,
+            {
+                headers: {
+                    Authorization: "Token "+this.$store.state.token_authorzation
+                }
+            }).then((response) => {
+                // console.log('rule',response.data[0].quyen_nguoi_dung)
+                response.data[0].quyen_nguoi_dung.forEach((object) => {
+                    // const id_cn = object.xem.slice(0,1);
+                    // console.log(object)
+                    if(object.machucnang == 2)
+                    {
+                        this.commitAction_CX({
+                            xem: object.xem,
+                            them: object.them,
+                            sua: object.sua,
+                            xoa: object.xoa,
+                            xuat: object.xuat,
+                        })
+                    }
+                    if(object.machucnang == 3) 
+                    {
+                        this.commitAction_tinhtrang_cx({
+                            xem: object.xem,
+                            them: object.them,
+                            sua: object.sua,
+                            xoa: object.xoa,
+                            xuat: object.xuat,
+                        })
+                    }
+                    if(object.machucnang == 7)
+                    {
+                        this.commitAction_thicong({
+                            xem: object.xem,
+                            them: object.them,
+                            sua: object.sua,
+                            xoa: object.xoa,
+                            xuat: object.xuat,
+                        })
+                    }
+                    if(object.machucnang == 9)
+                    {
+                        this.commitAction_tttc({
+                            xem: object.xem,
+                            them: object.them,
+                            sua: object.sua,
+                            xoa: object.xoa,
+                            xuat: object.xuat,
+                        })
+                    }
+                    if(object.machucnang == 10)
+                    {
+                        this.commitAction_nd({
+                            xem: object.xem,
+                            them: object.them,
+                            sua: object.sua,
+                            xoa: object.xoa,
+                            xuat: object.xuat,
+                        })
+                    }
+                })
+                // response.data[1].forEach((rule) => {
+                //     console.log(rule)
+                // })
+            })
+            
+        })
         if(!this.$session.has('key'))
         {
             this.$router.push('/login')
