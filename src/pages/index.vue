@@ -10,6 +10,7 @@
     </side-bar>
     <add-feature :dialog="dialog" @showModalAddFeature = "showModalAddFeature" ></add-feature>
     <update-feature></update-feature>
+    <images-page></images-page>
     <search-features :dialogSearch= "dialogSearch" @showModalSearchFeatures= "dialogSearch = $event"></search-features>
     <div id="viewDiv" :class="{active: ClassActive}" ></div>
 </v-layout>
@@ -29,6 +30,7 @@ export default {
         "add-feature": () => import("@/components/widgets/addFeature.vue"),
         "update-feature":() => import('@/components/widgets/updateFeature.vue'),
         "search-features":() => import('@/components/widgets/searchFeatures.vue'),
+        "images-page":()=> import('@/components/widgets/Imagescx.vue')
     },
     methods: {
         ...mapActions([

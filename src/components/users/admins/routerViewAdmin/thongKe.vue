@@ -84,6 +84,9 @@
                 :headers="headers"
                 :items="result_list"
             >
+            <!--<template v-slot:item.matinhtrang='{item}'>
+                {{filterTT(item.matinhtrang)}}
+            </template>-->
             </v-data-table>
         </div>
         <div>
@@ -115,8 +118,10 @@ export default {
                 {text: 'Tình Trạng', value: 'matinhtrang'},
                 {text: 'Tuyến Đường', value: 'tuyenduong'},
                 {text: 'Người Cập Nhật', value: 'nguoicapnhat'},
-                // {text: 'Kinh Độ', value: 'kinhdo'},
-                // {text: 'Vĩ Độ', value: 'vido'}
+                {text: 'Kinh Độ', value: 'kinhdo'},
+                {text: 'Vĩ Độ', value: 'vido'},
+                {text: 'Quận huyện', value: 'quanhuyen'},
+                {text: 'Phường xã', value: 'phuongxa'}
             ],
             listStreet: [],
             TuyenDuong: null,
@@ -125,6 +130,7 @@ export default {
             listTreeName: [],
             MaTenCX: null,
             listCX: [],
+            listcxpdf: [],
             result_list: [],
             json_fields: {
                 "Objectid" : 'objectid',
@@ -137,16 +143,13 @@ export default {
                 "Ngày cập nhật": 'ngaycapnhat',
                 "Thuộc tính": 'thuoctinh',
                 "Ghi chú": 'ghichu',
-                "Tình Trạng": {
-                    field: 'matinhtrang',
-                    // callback: (value) => {
-                    //     // console.log("value", value)
-                    // }
-                    },
+                "Tình Trạng": 'matinhtrang',
                 "Tuyến đường": 'tuyenduong',
                 "Người Cập Nhật": 'nguoicapnhat',
-                // "Kinh độ": 'kinhdo',
-                // "Vĩ độ": 'vido'
+                "Kinh độ": 'kinhdo',
+                "Vĩ độ": 'vido',
+                "Quận Huyện": 'quanhuyen',
+                "Phường xã": 'phuongxa'
             },
             selected: {},
             tacvu: [
@@ -169,7 +172,7 @@ export default {
             }
             })
             .then((response) =>{
-            this.listStreet = response.data
+                this.listStreet = response.data
             })
         },
         apiDanhSachTinhTrangCX(){
@@ -182,6 +185,11 @@ export default {
                 this.listTreeStatus = response.data
             })
         },
+        filterTT(id){
+            return this.ListTreeStatus.filter((value, index, array) =>{
+                 return array[index].matinhtrang == id
+            })[0].tinhtrang
+        },
         apiDanhSachTenCX(){
             axios.get("http://113.161.225.252:8000/ten-cay-xanh/", {
             headers: {
@@ -190,6 +198,16 @@ export default {
             })
             .then((response) =>{
                 this.listTreeName = response.data
+            })
+        },
+        cayxanhxuatpdf(){
+            axios.get("http://113.161.225.252:8000/cay-xanh/", {
+            headers: {
+                Authorization: "Token "+this.$store.state.token_authorzation
+            }
+            })
+            .then((response) =>{
+                this.listcxpdf = response.data
             })
         },
         thongkeketxuat(){
@@ -205,6 +223,7 @@ export default {
                     && (this.TuyenDuong == "" || this.TuyenDuong == null))
                 {
                     this.result_list = this.listCX
+                    console.log('abc', this.result_list)
                 }
                 else if((this.MaTenCX != "" || this.MaTenCX != null) 
                     && (this.MaTinhTrang == "" || this.MaTinhTrang == null)
@@ -269,50 +288,36 @@ export default {
            const array = [
                             [ 
                                 { 
-                                    text: 'Objectid', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Objectid', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Số Hiệu', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Số Hiệu', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Tên cây xanh', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Tên cây xanh', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Kinh độ', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Kinh độ', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Vĩ độ', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Vĩ độ', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Đường kính', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Đường kính', bold: true, fontSize: 8, 
                                 },
                                 { 
-                                    text: 'Chiều cao', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Chiều cao', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Độ rộng tán', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Độ rộng tán', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Ngày trồng', bold: true, fontSize: 8, width: 'auto'
+                                    text: 'Ngày trồng', bold: true, fontSize: 8
                                 },
                                 { 
-                                    text: 'Ngày Cập Nhật', bold: true, fontSize: 8, width: '*'
+                                    text: 'Tuyến đường', bold: true, fontSize: 8
                                 },
-                                { 
-                                    text: 'Thuộc tính', bold: true, fontSize: 8, width: '*'
-                                },
-                                { 
-                                    text: 'Ghi chú', bold: true, fontSize: 8, width: '*'
-                                },
-                                { 
-                                    text: 'Tình trạng', bold: true, fontSize: 8, width: '*'
-                                },
-                                { 
-                                    text: 'Tuyến đường', bold: true, fontSize: 8, width: '*'
-                                },
-                                { 
-                                    text: 'Người cập nhật', bold: true, fontSize: 8, width: '*'
-                                },
+
                             ]
                         ]
             this.result_list.forEach((arr) => {
@@ -320,15 +325,26 @@ export default {
                 //    console.log(arr[key]);
                     return arr[key];
                 });
-                 array.push(rarr)
+                
+                // console.log(arr)
+                 array.push([arr.objectid, arr.sohieu, arr.matencx, arr.kinhdo, arr.vido, arr.duongkinh, arr.chieucao, arr.dorongtan, arr.ngaytrong, arr.tuyenduong])
             })
-            // if(this.selected == "filecsv"){ 
-            //     this.mimetype = "csv"
-            //     return this.result_list
-            // }
             if(this.selected == "filepdf"){
                 var docDefinition = {
                     pageOrientation: 'landscape',
+                    defaultStyle:{
+                        fontSize: 8,
+                        bold: false,
+                    },
+                    footer: function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; },
+                    header: function(currentPage, pageCount, pageSize) {
+                        // you can apply any logic and return any valid pdfmake element
+
+                        return [
+                            { text: 'Thống kê cây xanh', fontSize:10, alignment: (currentPage % 2) ? 'left' : 'right' },
+                            { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+                        ]
+                    },
                     content: [
                         {
                             // layout: 'lightHorizontalLines', // optional
@@ -347,9 +363,10 @@ export default {
                 }
                 pdfMake.createPdf(docDefinition).download('Thongkecayxanh.pdf');
             }
-            else{
-                
-                // console.log(this.result_list)
+            else
+            {
+                return this.result_list 
+                // alert('abc')
             }
         },
     },

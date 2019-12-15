@@ -18,7 +18,7 @@ const state = {
     danhsachnguoidung: [],
     loading: false,
     token_authorzation: "6e53a1474b28d72e4a6837e493dc124fbde4a703",
-    api_url: "https://tms-backend.vbgis.vn/"
+    api_url: "http://113.161.225.252:8000/"
 }
 
 export default new Vuex.Store({

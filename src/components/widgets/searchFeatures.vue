@@ -4,7 +4,7 @@
      <form class="content-form">
       <v-card style="height: 100%">
         <v-card-title class="themcaytitle">
-          <span class="headline">Tra cứu thông tin cây xanh</span>
+          <span class="headline" style="font-size:16px;">Tra cứu thông tin cây xanh</span>
         </v-card-title>
         <v-card-text class="card-text">
           <v-container>
@@ -34,7 +34,7 @@
               <v-col cols="12" sm="12" md="12">
                 <v-text-field 
                   v-model="search_key"
-                  label="Search"
+                  label="Tìm theo tuyến đường"
                   append-icon="mdi-magnify"
                   single-line
                   @click:append="search_TD()"
@@ -43,7 +43,17 @@
                 </v-text-field>
               </v-col>
 
+              <v-col cols="12" sm="6" md="6">
+                <select class="select-tag" @change="FilterTenCX()" v-model="matencx">
+                  <option value="null">Tên cây</option>
+                  <option v-for="(tencx,index) in tencxlist" :key="index" :value="tencx.matencx"> 
+                    {{tencx.tencx}}
+                  </option>
+                </select>
+              </v-col>
+
               <v-col cols="12" sm="12">
+                  <p v-if="data_search"><strong>Tổng số cây: </strong> {{data_search.length}} </p>
                   <ol>
                       <li v-for="(search, index) in data_search" :key="index">
                         {{search.attributes.SoHieu }} - {{search.attributes.MaTenCX}} <v-btn icon @click="goTo(search)"><v-icon>mdi-chevron-right</v-icon></v-btn>
@@ -59,7 +69,7 @@
         <v-card-actions class="card-action" background-color="#333">
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="$emit('showModalSearchFeatures',false)">Close</v-btn>
-          <v-btn color="blue darken-1" @click="dialog2 = true" text>Xuất file</v-btn>
+          <!--<v-btn color="blue darken-1" @click="dialog2 = true" text>Xuất file</v-btn>-->
         </v-card-actions>
       </v-card>
       </form>
@@ -86,9 +96,12 @@ export default {
         maduong: "",
         search_key: "",
         data_search: this.getSearch,
+        data_search_tmp: this.getSearch,
         disabled: true,
         disabled_search: true,
-        dialog2: false
+        dialog2: false,
+        tencxlist:null,
+        matencx: "null"
       }
     },
     computed: {
@@ -98,6 +111,7 @@ export default {
       getSearch(newVal)
       {
         this.data_search = newVal
+        this.data_search_tmp = newVal
         // console.log("Bình Thúi",this.data_search.length)
         if (this.data_search.length > 0){
           this.disabled_search = false
@@ -144,12 +158,15 @@ export default {
           // console.log('TD',response.data)
         })
       },
-      // queryFeature(){
-      //   queryFeatures({
-      //     url: this.$store.state.BaseMap.url,                   
-      //   })
-      //   .then(result)
-      // },
+      getApiTenCX(){
+        axios.get("http://113.161.225.252:8000/ten-cay-xanh/",{
+          headers:{
+            Authorization: "Token "+this.$store.state.token_authorzation
+          }
+        }).then((response)=> {
+          this.tencxlist = response.data
+        })
+      },
       async FilterQH()
       {
         this.disabled = false
@@ -182,6 +199,21 @@ export default {
               zoom: 15
             })
           })
+        
+      },
+      FilterTenCX(){
+        // console.log(()
+        console.log(this.data_search_tmp, this.data_search)
+        if(this.matencx == 'null')
+        {
+          this.data_search = this.data_search_tmp
+        }
+        else
+        {
+          this.data_search = this.data_search_tmp.filter((value, index, array)=>{
+          return array[index].attributes.MaTenCX == this.matencx
+        })
+        }
         
       },
       search_TD()
@@ -262,6 +294,7 @@ export default {
       this.getApiTuyenduong()
       this.getApiQuanHuyen()
       this.getApiPhuongXa()
+      this.getApiTenCX()
     },
 }
 </script>
@@ -278,4 +311,12 @@ export default {
 .theme--light.v-card .v-card__text::-webkit-scrollbar-track {background: #f1f1f1;}
 .theme--light.v-card .v-card__text::-webkit-scrollbar-thumb {background: #6a6a6a;}
 .theme--light.v-card .v-card__text::-webkit-scrollbar-thumb:hover {background: rgb(38, 137, 214);}
+.select-tag{
+  border-bottom: 1px solid;
+  padding: 2px 5px;
+  width: 100%;
+  }
+.select-tag:focus{
+  outline: none;
+}
 </style>

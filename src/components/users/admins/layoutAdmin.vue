@@ -48,9 +48,10 @@ export default {
         },
         {
             headers: {
-                Authorization: "Token "+this.$store.state.token_authorzation
+                Authorization: "Token "+ this.$store.state.token_authorzation
             }
         }).then((response) => {
+            console.log('test', response.data)
             axios.get(this.$store.state.api_url + 'quyen-nguoi-dung/?maquyen='+response.data.quyen,
             {
                 headers: {
@@ -110,7 +111,9 @@ export default {
                             xoa: object.xoa,
                             xuat: object.xuat,
                         })
+                        console.log('luân khùng',object)
                     }
+                    
                 })
                 // response.data[1].forEach((rule) => {
                 //     console.log(rule)

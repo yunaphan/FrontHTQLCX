@@ -81,7 +81,7 @@ export default {
               // console.log(response.data)
               this.$session.start()
               this.$session.set('key',response.data.key)
-              this.$router.push('/admin')
+              this.$router.push('/map')
           })
         }
     },

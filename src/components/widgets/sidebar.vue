@@ -10,9 +10,9 @@
      >
       <v-list-item class="user_account">
         <v-list-item-avatar>
-          <v-img src="http://localhost:8080/images/avatar.jpg"/>
+          <v-img :src="user.duongdanavatar"/>
         </v-list-item-avatar>
-        <v-list-item-title class="list-title"> Phan Tiên</v-list-item-title>
+        <v-list-item-title class="list-title"> {{user.username}}</v-list-item-title>
         <v-btn @click.stop = "mini = !mini" class="close-sidebar" icon><v-icon color="primary">mdi-chevron-left</v-icon></v-btn>
 
       </v-list-item>
@@ -50,10 +50,12 @@
   </v-card>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data:()=>{
     return{
-      mini: true
+      mini: true,
+      user: {}
     }
   },
   props:{
@@ -67,6 +69,20 @@ export default {
     },
     showModalSearchFeatures(){
       this.$emit("showModalSearchFeatures", true)
+    },
+    api_user()
+    {
+       axios.post("http://113.161.225.252:8000/infomations-by-token/",{
+      key: this.$session.get('key')
+      },
+      {
+        headers: {
+          Authorization: "Token "+this.$store.state.token_authorzation,
+         
+        }
+      }).then((response) => {
+        this.user = response.data
+      })
     }
   },
   computed: {
@@ -82,7 +98,10 @@ export default {
     {
       this.$emit("showMini",false)
     }
-  }
+  },
+  created() {
+    this.api_user()
+  },
 }
 </script>
 <style lang="css">

@@ -10,6 +10,9 @@ import * as firebase from 'firebase'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'dayspan-vuetify/dist/lib/dayspan-vuetify.min.css'
+import VueDraggable from 'vue-draggable'
+import 'vue-material-design-icons/styles.css';
+Vue.use(VueDraggable)
 const firebaseConfig = {
   apiKey: "AIzaSyBfd4mIJqjuwYVai39tf9bbBzTerGdv2KA",
   authDomain: "htqlcx.firebaseapp.com",

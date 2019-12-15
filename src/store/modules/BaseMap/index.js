@@ -52,8 +52,10 @@ const getters = {
     },
     getSearch: (state) => {
         return state.searchs
+    },
+    getdjalog_imagepage: (state) => {
+        return state.djalog_imagepage
     }
-
     
 }
 export default{

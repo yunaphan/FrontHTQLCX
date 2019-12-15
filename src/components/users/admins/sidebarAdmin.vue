@@ -8,10 +8,9 @@
       style="background-color: #e0e0e0;">
       <v-list-item class="user_account">
         <v-list-item-avatar>
-          <v-img src="http://localhost:8080/images/avatar.jpg"></v-img>
+          <v-img :src="user.duongdanavatar"></v-img>
         </v-list-item-avatar>
-
-        <v-list-item-title class="list-title">Phan Tiên</v-list-item-title>
+        <v-list-item-title class="list-title">{{user.username}}</v-list-item-title>
 
         <v-btn
           icon
@@ -32,12 +31,11 @@
         <v-icon>mdi-view-dashboard</v-icon>
         <v-list-item-title> DashBoard</v-list-item-title>
       </v-list-item>
-
       <v-list-group v-if="getAction_nd.xem == '10.1' || getAction_nd.them == '10.2'|| getAction_nd.sua == '10.3' || getAction_nd.xoa == '10.4'">
         <template v-slot:activator>
           <v-list-item-content>
             <v-list-item-title><v-icon>mdi-account-box-multiple</v-icon> Quản lí người dùng</v-list-item-title>
-          </v-list-item-content>
+          </v-list-item-content>             
         </template>
         <v-list-item v-if="getAction_nd.them == '10.2'"
           link to="/admin/user-accounts/them-nguoi-dung-moi">
@@ -50,7 +48,7 @@
           <!--<v-list-item-icon><v-icon>mdi-clipboard-account</v-icon></v-list-item-icon>-->
         </v-list-item>
          <v-list-item  v-if="getAction_nd.xem == '10.1' || getAction_nd.sua == '10.3'" link to="/admin/quyen-nguoi-dung">
-          <v-list-item-title>Danh mục quyền</v-list-item-title>
+          <v-list-item-title>Phân quyền</v-list-item-title>
           <!--<v-list-item-icon><v-icon>mdi-clipboard-account</v-icon></v-list-item-icon>-->
         </v-list-item>
       </v-list-group>
@@ -124,6 +122,7 @@ import {mapGetters} from 'vuex'
       return {
         drawer: true,
         mini: true,
+        user: {}
       }
     },
     computed: {
@@ -142,6 +141,12 @@ import {mapGetters} from 'vuex'
         // console.log('action',newVal)
       }
     },
+    methods: {
+      // api_user()
+      // {
+      //   axios.post()
+      // }
+    },
     created() {
       // console.log(this.$session.get('key'))
       axios.post("http://113.161.225.252:8000/infomations-by-token/",{
@@ -152,8 +157,8 @@ import {mapGetters} from 'vuex'
           Authorization: "Token "+this.$store.state.token_authorzation,
          
         }
-      }).then(() => {
-        // console.log(response.data)
+      }).then((response) => {
+        this.user = response.data
       })
     },
   }

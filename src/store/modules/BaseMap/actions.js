@@ -13,7 +13,8 @@ const actions = {
     },
     commitdrawGraphics: ({commit},payload) => {
         commit("drawGraphics",payload)
-    }
+    },
+
 }
 
 export default actions;

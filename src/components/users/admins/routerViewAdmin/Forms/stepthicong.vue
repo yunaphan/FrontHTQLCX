@@ -2,7 +2,7 @@
 <v-dialog id="lich-thi-cong" v-model="dialog" persistent max-width="1000">
     <v-card class="them-lich-thi-cong">
         <v-card-title>
-        <span>Lịch thi công {{dateFormattedStart}} - {{dateFormattedEnd}}</span>
+        <span>Lịch thi công {{dateFormattedStart}} / {{dateFormattedEnd}}</span>
         </v-card-title>
         <v-card-text>
         <v-container>
@@ -60,7 +60,7 @@
                                 <v-card-actions>
                                     <v-btn color="primary" @click="e1 = 2" class="ac-1"><v-icon>mdi-arrow-right</v-icon></v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="$emit('closeDialog',false)">Close</v-btn>
+                                    <v-btn color="blue darken-1" text @click="$emit('closeDialog',false)">Đóng</v-btn>
                                 </v-card-actions>
                             </v-stepper-content>
                             <v-stepper-content step="2">
@@ -84,7 +84,7 @@
                                     <v-btn color="primary" @click="e1 = 1" class="ac-1"><v-icon>mdi-arrow-left</v-icon></v-btn>
                                     <v-btn color="primary" @click="e1 = 3" class="ac-1"><v-icon>mdi-arrow-right</v-icon></v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="$emit('closeDialog',false)">Close</v-btn>
+                                    <v-btn color="blue darken-1" text @click="$emit('closeDialog',false)">Đóng</v-btn>
                                 </v-card-actions>
                                 
                             </v-stepper-content>
@@ -116,8 +116,8 @@
                                 <v-card-actions>
                                     <v-btn color="primary" @click="e1 = 2" class="ac-1"><v-icon>mdi-arrow-left</v-icon></v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="$emit('closeDialog',false)">Close</v-btn>
-                                    <v-btn color="blue darken-1" text @click="api_lich_thi_cong()">Save</v-btn>
+                                    <v-btn color="blue darken-1" text @click="$emit('closeDialog',false)">Đóng</v-btn>
+                                    <v-btn color="blue darken-1" text @click="api_lich_thi_cong()">Hoàn thành</v-btn>
 
                                 </v-card-actions>
                             </v-stepper-content>
@@ -163,7 +163,7 @@ export default {
             matrangthai: "",
             ghichu: "",
             matrangthaitc: null,
-            ten_lic_thi_cong: ""
+            ten_lic_thi_cong: "",
         }
     },
     methods: {
@@ -249,6 +249,7 @@ export default {
             })
             alert('Tạo lịch thi công thành công!')
             this.$emit('closeDialog',false)
+
         }
     },
     created() {

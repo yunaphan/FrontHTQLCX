@@ -259,9 +259,9 @@ const mutations = {
                 sources: [
                     {
                         layer: ubgFeatureLayer,
-                        searchFields: ["SoHieu", "MaTenCX"],
+                        searchFields: ["SoHieu", "MaTenCX", "OBJECTID"],
                         displayField: "SoHieu", 
-                        placeholder: "Số hiệu, chủng loại",
+                        placeholder: "objectid ,Số hiệu, tên cây",
                         exactMatch: false,
                         outFields: ["*"],
                         maxResults: 10,
@@ -269,7 +269,7 @@ const mutations = {
                         suggestionsEnabled: true,
                         minSuggestCharacters: 0,
                         searchAllEnabled: true,
-                        suggestionTemplate: "Cây: {MaTenCX}- Số Hiệu: {SoHieu}",
+                        suggestionTemplate: "Cây:{OBJECTID}- {MaTenCX}- Số Hiệu: {SoHieu}",
                         name: "Tìm theo Tên hoặc Số Hiệu Của Cây Xanh",
                         resultSymbol: {
                             type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
@@ -290,8 +290,10 @@ const mutations = {
             ubg_searchwidget.includeDefaultSources = false;
             ubg_searchwidget.locationEnabled = false;
             state.view = view;
+            // console.log('view', state.view)
             view.when(async () => {
                 view.popup.on("trigger-action", async (event) => {
+                    // console.log('popup', event)
                     if(event.action.id === "delTree"){
                         state.selectedFeature = await event.target.selectedFeature
                         var varning_del = await confirm('Bạn có chắc muốn xóa cây?');
@@ -310,8 +312,9 @@ const mutations = {
                         state.selectedFeature = await event.target.selectedFeature
                         // await console.log(state.selectedFeature)
                     }
-                    if(event.action.id =="viewImage"){
-                        djalog_imagepage = await true
+                    if(event.action.id === "viewImage"){
+                        state.djalog_imagepage = await true
+                        state.selectedFeature = await event.target.selectedFeature
                     }
                 })
             });
@@ -319,7 +322,7 @@ const mutations = {
                 view: view
             });
             view.ui.add(track, "top-right");
-            console.log('track', track.view.center)
+            // console.log('track', track.view.center)
 
         });
     },
@@ -418,7 +421,8 @@ const mutations = {
                 
             })
         })
-    }
+    },
+
 }
 
 export default mutations;
